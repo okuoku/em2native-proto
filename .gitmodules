@@ -1,0 +1,18 @@
+[submodule "yfrm"]
+	path = yfrm
+	url = https://github.com/okuoku/yfrmbase
+[submodule "nccc/nccc"]
+	path = nccc/nccc
+	url = https://github.com/okuoku/nccc
+[submodule "nccc/napi-sdkfiles"]
+	path = nccc/napi-sdkfiles
+	url = https://github.com/okuoku/napi-sdkfiles
+[submodule "nccc/duk-temp"]
+	path = nccc/duk-temp
+	url = https://github.com/okuoku/duk-em2native
+[submodule "app/prepare"]
+	path = app/prepare
+	url = https://github.com/okuoku/emprepare-proto
+[submodule "app/testapp"]
+	path = app/testapp
+	url = https://github.com/okuoku/emtestapp2
