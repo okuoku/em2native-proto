@@ -1,12 +1,14 @@
 /* Main */
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "duktape.h"
 
 #include "duk_print_alert.h"
 
-#define BOOTSTRAP_FILE (SCRIPTROOT "/bootstrap.js")
+#define BOOTSTRAP_FILE "bootstrap.js"
 
 void dukregisternccc(duk_context* ctx);
 
@@ -112,7 +114,7 @@ dukload(duk_context* ctx, const char* filename, int flags){
     duk_pop(ctx);
 }
 
-int main(int argc, char *argv[]) {
+int YFRM_ENTRYPOINT(int argc, char *argv[]) {
     duk_context *ctx = duk_create_heap_default();
     duk_print_alert_init(ctx, 0);
     dukregisternccc(ctx);

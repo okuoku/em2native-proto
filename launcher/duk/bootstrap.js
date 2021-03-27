@@ -212,7 +212,7 @@ if(promisepolyfill){
     eval(promisepolyfill);
 }
 
-const bootfile = BOOTSTRAP.readtext("output-duk/index.js");
+const bootfile = BOOTSTRAP.readtext("index.js");
 if(bootfile){
     try {
         eval(bootfile);
