@@ -63,11 +63,25 @@ if(WINDOWS_STORE)
     add_definitions(-DSET_SDL_PKG_PATH_PREFIX)
 endif()
 
+# NCCC stub generation
+include(./nccc/nccc/stubsupport/cmake/NcccStubMacros.cmake)
+include(./yfrm/yuniframe/nccc/stub_yfrm.cmake)
+include(./yfrm/yuniframe/nccc/stub_cwgl.cmake)
+include_directories(
+    nccc/nccc/stubsupport
+    ${CMAKE_CURRENT_BINARY_DIR})
+
 add_executable(em2app WIN32
     launcher/duk/yuniduk.c
     launcher/duk/fakedlfcn.c
     launcher/duk/print/duk_print_alert.c
     ${duk-srcs}
+    # NCCC stubs
+    launcher/nccc/colroot.c
+    launcher/nccc/stublead.yfrm.c
+    launcher/nccc/stublead.cwgl.c
+
+    # NCCC runtime
     nccc/nccc/javascript/duk-nccc/duk-nccc.c
     nccc/nccc/common/ncccutils.c
     ${rsrcs}

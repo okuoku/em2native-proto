@@ -14,9 +14,11 @@ struct tbl_entry{
     void** addr;
 };
 
+extern void yfrm_nccc_root_00(const uint64_t* in, uint64_t* out);
 extern void the_module_root(const uint64_t* in, uint64_t* out);
 
 struct tbl_entry tbl[] = {
+    { "yfrm_nccc_root_00", yfrm_nccc_root_00 },
     { "the_module_root", the_module_root },
     { 0, 0 }
 };
