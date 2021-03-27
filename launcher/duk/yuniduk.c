@@ -79,6 +79,7 @@ copywithin_uint8(duk_context* ctx){
 }
 
 /* clz32 */
+#ifndef _MSC_VER
 static duk_ret_t
 clz32(duk_context* ctx){
     const double d = duk_require_number(ctx, 0);
@@ -93,6 +94,24 @@ clz32(duk_context* ctx){
     duk_push_number(ctx, ret);
     return 1;
 }
+#else
+#include <intrin.h>
+static duk_ret_t
+clz32(duk_context* ctx){
+    uint32_t leading_zero = 0;
+    const double d = duk_require_number(ctx, 0);
+    const uint32_t u = d;
+    uint32_t ret;
+
+    if(_BitScanReverse(&leading_zero, u)){
+        ret = 31 - leading_zero;
+    }else{
+        ret = 32;
+    }
+    duk_push_number(ctx, ret);
+    return 1;
+}
+#endif
 
 static void
 dukload(duk_context* ctx, const char* filename, int flags){
