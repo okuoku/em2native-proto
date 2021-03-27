@@ -5,7 +5,7 @@ project(apps C)
 
 if(NOT WITH_WASM2C)
     # FIXME: WABT path
-    set(WITH_WASM2C "c:/cygwin64/home/oku/repos/cwgl/wabt-static/wasm2c.exe") 
+    set(WITH_WASM2C "${CMAKE_CURRENT_LIST_DIR}/prepare/wabt-static/wasm2c.exe") 
 endif()
 
 if(WIN32)
@@ -20,8 +20,9 @@ else()
     set(opt_target_triple)
 endif()
 
-set(STUBGEN "${CMAKE_CURRENT_LIST_DIR}/../stubgen")
-set(WASMSTUB "${CMAKE_CURRENT_LIST_DIR}/../wasmstub")
+set(STUBGEN "${CMAKE_CURRENT_LIST_DIR}/../nccc/nccc/wasm/wasm2c/bridge/scripts")
+set(WASMSTUB "${CMAKE_CURRENT_LIST_DIR}/../nccc/nccc/wasm/wasm2c/bridge")
+set(WASMRUNTIME "${CMAKE_CURRENT_LIST_DIR}/../wasm2cruntime")
 
 function(translate_wasm proj wasmpath) # => .o (USE_HOST_LLVM) or .c
     set(WASM2C "${WITH_WASM2C}")
@@ -52,7 +53,8 @@ function(translate_wasm proj wasmpath) # => .o (USE_HOST_LLVM) or .c
             ${opt_target_triple}
             -Xclang -disable-O0-optnone
             -DWASM_RT_MEMCHECK_SIGNAL_HANDLER=1
-            -I${WASMSTUB}
+            -I${WASMSTUB} # Do we still need this?
+            -I${WASMRUNTIME}
             -o ${bcpath} ${wasmcpath}
             DEPENDS ${wasmcpath} ${wasmhpath}
             COMMENT "WASM: Translating .c => LLVM (${proj})")
@@ -103,11 +105,11 @@ function(addapp app wasmpath)
     else()
         set(wasmbinary "${base}_wasm.c")
     endif()
-    add_library(appdll_${app} SHARED
+    add_library(appcode_${app} STATIC
         ${wasmbinary}
         ${base}_stub.c
         ${base}_stubdata.h
-        ${WASMSTUB}/rt.c)
+        ${WASMRUNTIME}/rt.c)
     if(NOT USE_HOST_LLVM)
         set_source_files_properties(
             ${wasmbinary}
@@ -123,14 +125,9 @@ function(addapp app wasmpath)
     endif()
 endfunction()
 
-set(APPROOT "${CMAKE_CURRENT_LIST_DIR}/../jstestapp")
+set(APPROOT "${CMAKE_CURRENT_LIST_DIR}/testapp")
 
-include_directories(${WASMSTUB} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${WASMSTUB} ${WASMRUNTIME} ${CMAKE_CURRENT_BINARY_DIR})
 
-addapp(app ${APPROOT}/app/example_emscripten_opengl3.wasm)
-addapp(app2 ${APPROOT}/app2/gltest2.wasm)
-addapp(app3 ${APPROOT}/app3/webgl.wasm)
-addapp(app4 ${APPROOT}/app4/webgl.wasm)
-addapp(app5 ${APPROOT}/app5/webgl.wasm)
-addapp(app6 ${APPROOT}/app6/dosbox-x.wasm)
+addapp(app7 ${APPROOT}/app7/webgl.wasm)
 
