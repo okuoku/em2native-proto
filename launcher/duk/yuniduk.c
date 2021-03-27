@@ -131,8 +131,23 @@ dukload(duk_context* ctx, const char* filename, int flags){
     duk_pop(ctx);
 }
 
+#ifdef SET_SDL_PKG_PATH_PREFIX
+char* SDL_GetBasePath(void);
+static void
+initprefix(void){
+    char* p = SDL_GetBasePath();
+    if(p){
+        yfrm_file_set_prefix0(p);
+    }
+}
+#else
+static void initprefix(void){
+}
+#endif
+
 int YFRM_ENTRYPOINT(int argc, char *argv[]) {
     duk_context *ctx = duk_create_heap_default();
+    initprefix();
     duk_print_alert_init(ctx, 0);
     dukregisternccc(ctx);
     duk_eval_string(ctx, "print(JSON.stringify(NCCC));");
