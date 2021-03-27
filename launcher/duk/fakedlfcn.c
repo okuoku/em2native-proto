@@ -14,25 +14,23 @@ struct tbl_entry{
     void** addr;
 };
 
-extern void* the_module_root;
+extern void the_module_root(const uint64_t* in, uint64_t* out);
 
 struct tbl_entry tbl[] = {
-    { "the_module_root", &the_module_root },
+    { "the_module_root", the_module_root },
     { 0, 0 }
 };
 
 void
 dlfcn_get(const uint64_t* in, uint64_t* out){
     char* const symname = (uintptr_t)in[1];
-    void** ref;
     void* ret;
     int i;
     i = 0;
     ret = 0;
     while(tbl[i].name){
         if(0 == strcmp(tbl[i].name, symname)){
-            ref = tbl[i].addr;
-            ret = *ref;
+            ret = tbl[i].addr;
             break;
         }
     }
