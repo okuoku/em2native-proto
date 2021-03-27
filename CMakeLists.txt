@@ -35,6 +35,7 @@ set_source_files_properties(
 include_directories(
     launcher/duk/print
     interp/duktape-src
+    yfrm/yuniframe/include
     )
 
 # Duktape

@@ -1,10 +1,8 @@
 /* Main */
-
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "duktape.h"
+#include "yfrm.h"
 
 #include "duk_print_alert.h"
 
@@ -18,23 +16,26 @@ dukdebugwrite(long level, const char* file, long line, const char* func, const c
 }
 
 static duk_ret_t
-readfile(duk_context* ctx, int readasbinary){
-    long siz;
-    FILE* fp;
+do_readfile(duk_context* ctx, int readasbinary, const char* filename){
+    uint64_t flags;
+    uint64_t siz;
+    yfrm_file_t* f;
+    int r;
     char* buf;
     void* p;
-    const char* filename;
-    filename = duk_require_string(ctx, 0);
-    fp = fopen(filename, "r");
-    if(!fp){
+    r = yfrm_file_open_ro(filename, &f);
+    if(r){
         duk_push_boolean(ctx, 0);
         return 1;
     }
-    fseek(fp,0,SEEK_END);
-    siz = ftell(fp);
-    fseek(fp,0,SEEK_SET);
+    r = yfrm_file_info(f, NULL, &siz, NULL, NULL);
+    if(r){
+        yfrm_file_close(f);
+        duk_push_boolean(ctx, 0);
+        return 1;
+    }
     buf = malloc(siz);
-    fread(buf,1,siz,fp);
+    r = yfrm_file_read(f, 0, buf, siz, NULL);
 
     if(readasbinary){
         p = duk_push_fixed_buffer(ctx, siz);
@@ -44,6 +45,13 @@ readfile(duk_context* ctx, int readasbinary){
     }
     free(buf);
     return 1;
+}
+
+static duk_ret_t
+readfile(duk_context* ctx, int readasbinary){
+    const char* filename;
+    filename = duk_require_string(ctx, 0);
+    return do_readfile(ctx, readasbinary, filename);
 }
 
 static duk_ret_t
@@ -115,21 +123,11 @@ clz32(duk_context* ctx){
 
 static void
 dukload(duk_context* ctx, const char* filename, int flags){
-    long siz;
-    FILE* fp;
-    char* buf;
-    fp = fopen(filename, "r");
-    fseek(fp,0,SEEK_END);
-    siz = ftell(fp);
-    fseek(fp,0,SEEK_SET);
-    buf = malloc(siz+1);
-    fread(buf,1,siz,fp);
-    buf[siz] = 0;
-
+    const char* buf;
+    (void)do_readfile(ctx, 0, filename);
     duk_push_string(ctx, filename);
-    duk_compile_string_filename(ctx, flags, buf);
-    free(buf);
-    duk_call(ctx, 0);
+    duk_compile(ctx, flags);
+    duk_call(ctx, 0); // FIXME: -1 ??
     duk_pop(ctx);
 }
 
