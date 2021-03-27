@@ -8,13 +8,15 @@ add_subdirectory(yfrm)
 
 set(rsrcs)
 foreach(e ${app7_FILES})
+    get_filename_component(dir ${e} DIRECTORY)
+    message(STATUS "${e} => ${dir}")
     set(fn ${app7_FILESBASE}/${e})
     list(APPEND rsrcs ${fn})
     set_source_files_properties(
         ${fn}
         PROPERTIES
         VS_DEPLOYMENT_CONTENT 1
-        VS_DEPLOYMENT_LOCATION ${e})
+        VS_DEPLOYMENT_LOCATION "${dir}")
 endforeach()
 
 list(APPEND rsrcs
@@ -23,14 +25,21 @@ set_source_files_properties(
     ${CMAKE_CURRENT_LIST_DIR}/runtime/promise-polyfill.min.js
     PROPERTIES
     VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION promise-polyfill.min.js)
+    VS_DEPLOYMENT_LOCATION "")
 list(APPEND rsrcs
     ${CMAKE_CURRENT_LIST_DIR}/launcher/duk/bootstrap.js)
 set_source_files_properties(
     ${CMAKE_CURRENT_LIST_DIR}/launcher/duk/bootstrap.js
     PROPERTIES
     VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION bootstrap.js)
+    VS_DEPLOYMENT_LOCATION "")
+list(APPEND rsrcs
+    ${CMAKE_CURRENT_LIST_DIR}/runtime/output-duk/index.js)
+set_source_files_properties(
+    ${CMAKE_CURRENT_LIST_DIR}/runtime/output-duk/index.js
+    PROPERTIES
+    VS_DEPLOYMENT_CONTENT 1
+    VS_DEPLOYMENT_LOCATION "")
 
 include_directories(
     launcher/duk/print
@@ -49,6 +58,10 @@ else()
         )
 endif()
 
+# FIXME: Workaround for UWP
+if(WINDOWS_STORE)
+    add_definitions(-DSET_SDL_PKG_PATH_PREFIX)
+endif()
 
 add_executable(em2app WIN32
     launcher/duk/yuniduk.c
