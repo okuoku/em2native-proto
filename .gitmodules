@@ -16,3 +16,6 @@
 [submodule "app/testapp"]
 	path = app/testapp
 	url = https://github.com/okuoku/emtestapp2
+[submodule "interp/duktape-src"]
+	path = interp/duktape-src
+	url = https://github.com/okuoku/duk-em2native
