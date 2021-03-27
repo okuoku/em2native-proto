@@ -51,6 +51,7 @@ endif()
 
 add_executable(em2app WIN32
     launcher/duk/yuniduk.c
+    launcher/duk/fakedlfcn.c
     launcher/duk/print/duk_print_alert.c
     ${duk-srcs}
     nccc/nccc/javascript/duk-nccc/duk-nccc.c
