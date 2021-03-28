@@ -10,6 +10,39 @@
 #define DUK_PRINT_ALERT_FLUSH   /* Flush after stdout/stderr write (Duktape 1.x: yes) */
 #undef DUK_PRINT_ALERT_SMALL    /* Prefer smaller footprint (but slower and more memory churn) */
 
+#ifdef USE_WIN32_DEBUGLOGGER
+#include <windows.h>
+
+static duk_ret_t duk__print_alert_helper(duk_context* ctx, FILE* fh) {
+	duk_idx_t nargs;
+	duk_size_t sz_buf;
+	const duk_uint8_t* buf;
+
+	nargs = duk_get_top(ctx);
+
+	/* If argument count is 1 and first argument is a buffer, write the buffer
+	 * as raw data into the file without a newline; this allows exact control
+	 * over stdout/stderr without an additional entrypoint (useful for now).
+	 * Otherwise current print/alert semantics are to ToString() coerce
+	 * arguments, join them with a single space, and append a newline.
+	 */
+
+	if (nargs == 1 && duk_is_buffer_data(ctx, 0)) {
+		buf = (const duk_uint8_t*)duk_get_buffer_data(ctx, 0, &sz_buf);
+		fwrite((const void*)buf, 1, (size_t)sz_buf, fh);
+                fflush(fh);
+	}
+	else {
+		duk_push_string(ctx, " ");
+		duk_insert(ctx, 0);
+		duk_concat(ctx, nargs);
+		OutputDebugStringA(duk_require_string(ctx, -1));
+	}
+
+	return 0;
+}
+
+#else
 #if defined(DUK_PRINT_ALERT_SMALL)
 static duk_ret_t duk__print_alert_helper(duk_context *ctx, FILE *fh) {
 	duk_idx_t nargs;
@@ -102,6 +135,7 @@ static duk_ret_t duk__print_alert_helper(duk_context *ctx, FILE *fh) {
 
 	return 0;
 }
+#endif
 #endif
 
 static duk_ret_t duk__print(duk_context *ctx) {

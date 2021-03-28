@@ -68,6 +68,8 @@ if(WIN32)
     add_definitions(
         -DDUK_USE_GET_MONOTONIC_TIME_WINDOWS_QPC=1
         )
+    # Debug @ launcher/duk/print/duk_print_alert.c
+    add_definitions(-DUSE_WIN32_DEBUGLOGGER)
 else()
     add_definitions(
         -DDUK_USE_GET_MONOTONIC_TIME_CLOCK_GETTIME=1
