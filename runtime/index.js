@@ -54,7 +54,7 @@ const BOOTPROTOCOL = "unity";
 const BOOTSTRAP = "app7/webgl.framework.js";
 const BOOTWASM = "app7/webgl.wasm";
 const APPFS_DIR = "app7/appfs";
-//const DLLFILE = "../apps/out/appdll_app7.dll";
+const DLLFILE = "../apps/out/appdll_app7.dll";
 
 import "regenerator-runtime/runtime.js";
 import PortStd from "./port-std.js";
@@ -62,9 +62,9 @@ import GL from "./webgl-cwgl.js";
 import audioctx_mini from "./audioctx-mini.js";
 import storage from "./storage.js";
 import EmuCanvas from "./emucanvas.js";
-//import WebAssembly_ist from "./wasmproxy.js";
+import WebAssembly_ist from "./wasmproxy.js";
 
-//const WebAssembly = WebAssembly_ist(DLLFILE);
+const WebAssembly = WebAssembly_ist(DLLFILE);
 
 const orig_setInterval = global.setInterval;
 
