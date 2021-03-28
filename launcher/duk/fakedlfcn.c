@@ -35,6 +35,7 @@ dlfcn_get(const uint64_t* in, uint64_t* out){
             ret = tbl[i].addr;
             break;
         }
+        i++;
     }
     if(ret){
         out[0] = 0;
