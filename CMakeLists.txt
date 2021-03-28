@@ -16,7 +16,7 @@ foreach(e ${app7_FILES})
         ${fn}
         PROPERTIES
         VS_DEPLOYMENT_CONTENT 1
-        VS_DEPLOYMENT_LOCATION "${dir}")
+        VS_DEPLOYMENT_LOCATION "app7/appfs/${dir}")
 endforeach()
 
 list(APPEND rsrcs
@@ -40,6 +40,22 @@ set_source_files_properties(
     PROPERTIES
     VS_DEPLOYMENT_CONTENT 1
     VS_DEPLOYMENT_LOCATION "")
+list(APPEND rsrcs
+    ${app7_JS}
+    )
+set_source_files_properties(
+    ${app7_JS}
+    PROPERTIES
+    VS_DEPLOYMENT_CONTENT 1
+    VS_DEPLOYMENT_LOCATION "app7")
+list(APPEND rsrcs # FIXME: Unity opens wasm anyway
+    app/testapp/app7/webgl.wasm
+    )
+set_source_files_properties(
+    app/testapp/app7/webgl.wasm
+    PROPERTIES
+    VS_DEPLOYMENT_CONTENT 1
+    VS_DEPLOYMENT_LOCATION "app7")
 
 include_directories(
     launcher/duk/print
