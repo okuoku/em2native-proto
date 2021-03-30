@@ -11,7 +11,8 @@ set(app7_FILES
     sharedassets1.resource
     )
 
-set(app7_FILESBASE c:/build/em2capp/output)
-set(app7_APPCODE c:/build/em2capp/appcode_app7.lib)
+set(app7_FILESBASE c:/build/em2capp/output) # Prebuilt??
+set(app7_APPCODE_PREBUILT ON)
+set(app7_APPCODE c:/build/em2capp/appcode_app7.lib) # Prebuilt
 set(app7_JS ${CMAKE_CURRENT_LIST_DIR}/app/testapp/app7/webgl.framework.js)
-
+set(app7_WASM ${CMAKE_CURRENT_LIST_DIR}/app/testapp/app7/webgl.wasm)

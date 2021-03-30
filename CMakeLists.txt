@@ -1,22 +1,33 @@
+# For WindowsStore:
+#   cmake -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0
+
 cmake_minimum_required(VERSION 3.1)
 project(em2capp C CXX)
 
+set(appname app7)
+
 include(./duk-srcs.cmake)
-include(./app7-files.cmake)
+include(./${appname}-files.cmake)
 
 add_subdirectory(yfrm)
 
+if(NOT ${appname}_APPCODE_PREBUILT)
+    add_subdirectory(app) # => appcode
+else()
+    set(appcode ${${appname}_APPCODE})
+endif()
+
 set(rsrcs)
-foreach(e ${app7_FILES})
+foreach(e ${${appname}_FILES})
     get_filename_component(dir ${e} DIRECTORY)
     message(STATUS "${e} => ${dir}")
-    set(fn ${app7_FILESBASE}/${e})
+    set(fn ${${appname}_FILESBASE}/${e})
     list(APPEND rsrcs ${fn})
     set_source_files_properties(
         ${fn}
         PROPERTIES
         VS_DEPLOYMENT_CONTENT 1
-        VS_DEPLOYMENT_LOCATION "app7/appfs/${dir}")
+        VS_DEPLOYMENT_LOCATION "${appname}/appfs/${dir}")
 endforeach()
 
 list(APPEND rsrcs
@@ -41,21 +52,21 @@ set_source_files_properties(
     VS_DEPLOYMENT_CONTENT 1
     VS_DEPLOYMENT_LOCATION "")
 list(APPEND rsrcs
-    ${app7_JS}
+    ${${appname}_JS}
     )
 set_source_files_properties(
-    ${app7_JS}
+    ${${appname}_JS}
     PROPERTIES
     VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION "app7")
+    VS_DEPLOYMENT_LOCATION "${appname}")
 list(APPEND rsrcs # FIXME: Unity opens wasm anyway
-    app/testapp/app7/webgl.wasm
+    ${${appname}_WASM}
     )
 set_source_files_properties(
-    app/testapp/app7/webgl.wasm
+    ${${appname}_WASM}
     PROPERTIES
     VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION "app7")
+    VS_DEPLOYMENT_LOCATION "${appname}")
 
 include_directories(
     launcher/duk/print
@@ -109,7 +120,7 @@ target_link_libraries(em2app
     yfrm
     angle_static
     SDL2-static
-    ${app7_APPCODE}
+    ${appcode}
 
     # SDL2 (Yuniframe)
     user32

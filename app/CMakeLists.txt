@@ -1,5 +1,9 @@
 # NB: It's not compatible with MSVC for now
 
+if(NOT APP_WASM)
+    message(FATAL_ERROR "APP_WASM is not set")
+endif()
+
 cmake_minimum_required(VERSION 3.0) # FIXME: Hex notation in MATH?
 project(apps C)
 
@@ -97,37 +101,33 @@ function(translate_wasm proj wasmpath) # => .o (USE_HOST_LLVM) or .c
     configure_file(${WASMSTUB}/_stub.c.in ${stubcpath} @ONLY)
 endfunction()
 
-function(addapp app wasmpath)
-    set(base ${CMAKE_CURRENT_BINARY_DIR}/${app})
-    translate_wasm(${app} ${wasmpath})
-    if(USE_HOST_LLVM)
-        set(wasmbinary "${base}_wasm.o")
-    else()
-        set(wasmbinary "${base}_wasm.c")
-    endif()
-    add_library(appcode_${app} STATIC
-        ${wasmbinary}
-        ${base}_stub.c
-        ${base}_stubdata.h
-        ${WASMRUNTIME}/rt.c)
-    if(NOT USE_HOST_LLVM)
-        set_source_files_properties(
-            ${wasmbinary}
-            PROPERTIES
-            COMPILE_DEFINITIONS "WASM_RT_MEMCHECK_SIGNAL_HANDLER=1")
-        if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR
-                ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
-            set_source_files_properties(
-                ${wasmbinary}
-                PROPERTIES
-                COMPILE_FLAGS "-fno-builtin")
-        endif()
-    endif()
-endfunction()
-
-set(APPROOT "${CMAKE_CURRENT_LIST_DIR}/testapp")
 
 include_directories(${WASMSTUB} ${WASMRUNTIME} ${CMAKE_CURRENT_BINARY_DIR})
 
-addapp(app7 ${APPROOT}/app7/webgl.wasm)
+set(base ${CMAKE_CURRENT_BINARY_DIR}/app)
+translate_wasm(app ${wasmpath})
+if(USE_HOST_LLVM)
+    set(wasmbinary "${base}_wasm.o")
+else()
+    set(wasmbinary "${base}_wasm.c")
+endif()
 
+add_library(appcode STATIC
+    ${wasmbinary}
+    ${base}_stub.c
+    ${base}_stubdata.h
+    ${WASMRUNTIME}/rt.c)
+
+if(NOT USE_HOST_LLVM)
+    set_source_files_properties(
+        ${wasmbinary}
+        PROPERTIES
+        COMPILE_DEFINITIONS "WASM_RT_MEMCHECK_SIGNAL_HANDLER=1")
+    if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR
+            ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
+        set_source_files_properties(
+            ${wasmbinary}
+            PROPERTIES
+            COMPILE_FLAGS "-fno-builtin")
+    endif()
+endif()
