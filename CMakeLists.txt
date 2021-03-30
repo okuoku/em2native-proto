@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(em2capp C CXX)
 
-set(appname app7)
+set(appname app1)
 
 include(./duk-srcs.cmake)
 include(./${appname}-files.cmake)
@@ -12,7 +12,9 @@ include(./${appname}-files.cmake)
 add_subdirectory(yfrm)
 
 if(NOT ${appname}_APPCODE_PREBUILT)
+    set(APP_WASM ${${appname}_WASM})
     add_subdirectory(app) # => appcode
+    set(appcode appcode)
 else()
     set(appcode ${${appname}_APPCODE})
 endif()

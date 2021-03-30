@@ -15,14 +15,12 @@ const APPFS_DIR = "app4/appfs";
 const DLLFILE = "../apps/out/appdll_app4.dll";
 */
 
-/*
 const BOOTPROTOCOL = "plain";
-const BOOTSTRAP = "app/example_emscripten_opengl3.js";
-const BOOTWASM = "app/example_emscripten_opengl3.wasm";
+const BOOTSTRAP = "app1/example_emscripten_opengl3.js";
+const BOOTWASM = "app1/example_emscripten_opengl3.wasm";
 const BOOTARGS = [];
 const APPFS_DIR = false;
 const DLLFILE = "../apps/out/appdll_app.dll";
-*/
 
 /*
 const BOOTPROTOCOL = "unity";
@@ -50,11 +48,13 @@ const APPFS_DIR = "app6/appfs";
 const DLLFILE = "../apps/out/appdll_app6.dll";
 */
 
+/*
 const BOOTPROTOCOL = "unity";
 const BOOTSTRAP = "app7/webgl.framework.js";
 const BOOTWASM = "app7/webgl.wasm";
 const APPFS_DIR = "app7/appfs";
 const DLLFILE = "../apps/out/appdll_app7.dll";
+*/
 
 import "regenerator-runtime/runtime.js";
 import PortStd from "./port-std.js";
