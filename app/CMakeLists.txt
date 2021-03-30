@@ -51,9 +51,11 @@ function(translate_wasm proj wasmpath) # => .o (USE_HOST_LLVM) or .c
         COMMENT "WASM: Translating .wasm => .c (${proj})")
 
     if(USE_HOST_LLVM)
+        set(clang
+            "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/Llvm/x64/bin/clang.exe")
         # .c => .bc
         add_custom_command(OUTPUT ${bcpath}
-            COMMAND clang -g3 -c -emit-llvm -O0
+            COMMAND "${clang}" -g3 -c -emit-llvm -O0
             ${opt_target_triple}
             -Xclang -disable-O0-optnone
             -DWASM_RT_MEMCHECK_SIGNAL_HANDLER=1
@@ -65,7 +67,7 @@ function(translate_wasm proj wasmpath) # => .o (USE_HOST_LLVM) or .c
 
         # .bc => .o
         add_custom_command(OUTPUT ${outpath}
-            COMMAND clang -g3 -O1 -c
+            COMMAND "${clang}" -g3 -O1 -c
             ${opt_target_triple}
             -o ${outpath} ${bcpath}
             DEPENDS ${bcpath}
@@ -105,9 +107,12 @@ endfunction()
 include_directories(${WASMSTUB} ${WASMRUNTIME} ${CMAKE_CURRENT_BINARY_DIR})
 
 set(base ${CMAKE_CURRENT_BINARY_DIR}/app)
-translate_wasm(app ${wasmpath})
+translate_wasm(app ${APP_WASM})
 if(USE_HOST_LLVM)
     set(wasmbinary "${base}_wasm.o")
+    set_source_files_properties(${wasmbinary}
+        PROPERTIES
+        EXTERNAL_OBJECT True)
 else()
     set(wasmbinary "${base}_wasm.c")
 endif()
