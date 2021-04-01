@@ -20,55 +20,31 @@ else()
 endif()
 
 set(rsrcs)
+macro(add_asset pth src)
+    get_filename_component(_pthdir "${pth}" DIRECTORY)
+    if(WINDOWS_STORE)
+        list(APPEND rsrcs "${src}")
+        set_source_files_properties(
+            "${src}"
+            PROPERTIES
+            VS_DEPLOYMENT_CONTENT 1
+            VS_DEPLOYMENT_LOCATION "${_pthdir}")
+    elseif(YUNIBASE_PKG_RSRC_ROOT)
+
+    endif()
+endmacro()
+
 foreach(e ${${appname}_FILES})
-    get_filename_component(dir ${e} DIRECTORY)
-    message(STATUS "${e} => ${dir}")
-    set(fn ${${appname}_FILESBASE}/${e})
-    list(APPEND rsrcs ${fn})
-    set_source_files_properties(
-        ${fn}
-        PROPERTIES
-        VS_DEPLOYMENT_CONTENT 1
-        VS_DEPLOYMENT_LOCATION "${appname}/appfs/${dir}")
+    add_asset("${appname}/appfs/${e}" "${${appname}_FILESBASE}/${e}")
 endforeach()
 
-list(APPEND rsrcs
-    ${CMAKE_CURRENT_LIST_DIR}/runtime/promise-polyfill.min.js)
-set_source_files_properties(
-    ${CMAKE_CURRENT_LIST_DIR}/runtime/promise-polyfill.min.js
-    PROPERTIES
-    VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION "")
-list(APPEND rsrcs
-    ${CMAKE_CURRENT_LIST_DIR}/launcher/duk/bootstrap.js)
-set_source_files_properties(
-    ${CMAKE_CURRENT_LIST_DIR}/launcher/duk/bootstrap.js
-    PROPERTIES
-    VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION "")
-list(APPEND rsrcs
-    ${CMAKE_CURRENT_LIST_DIR}/runtime/output-duk/index.js)
-set_source_files_properties(
-    ${CMAKE_CURRENT_LIST_DIR}/runtime/output-duk/index.js
-    PROPERTIES
-    VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION "")
-list(APPEND rsrcs
-    ${${appname}_JS}
-    )
-set_source_files_properties(
-    ${${appname}_JS}
-    PROPERTIES
-    VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION "${appname}")
-list(APPEND rsrcs # FIXME: Unity opens wasm anyway
-    ${${appname}_WASM}
-    )
-set_source_files_properties(
-    ${${appname}_WASM}
-    PROPERTIES
-    VS_DEPLOYMENT_CONTENT 1
-    VS_DEPLOYMENT_LOCATION "${appname}")
+add_asset("promise-polyfill.min.js" "${CMAKE_CURRENT_LIST_DIR}/runtime/promise-polyfill.min.js")
+add_asset("bootstrap.js" "${CMAKE_CURRENT_LIST_DIR}/launcher/duk/bootstrap.js")
+add_asset("index.js" "${CMAKE_CURRENT_LIST_DIR}/runtime/output-duk/index.js")
+get_filename_component(jsname "${${appname}_JS}" NAME)
+add_asset("${appname}/${jsname}" "${${appname}_JS}")
+get_filename_component(wasmname "${${appname}_WASM}" NAME)
+add_asset("${appname}/${wasmname}" "${${appname}_WASM}")
 
 include_directories(
     launcher/duk/print
