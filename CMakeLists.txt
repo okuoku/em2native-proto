@@ -20,6 +20,7 @@ else()
 endif()
 
 set(rsrcs)
+add_custom_target(deploy_assets)
 macro(add_asset pth src)
     get_filename_component(_pthdir "${pth}" DIRECTORY)
     if(WINDOWS_STORE)
@@ -29,8 +30,13 @@ macro(add_asset pth src)
             PROPERTIES
             VS_DEPLOYMENT_CONTENT 1
             VS_DEPLOYMENT_LOCATION "${_pthdir}")
-    elseif(YUNIBASE_PKG_RSRC_ROOT)
-
+    elseif(YFRM_PKG_RSRC_ROOT)
+        set(_out "${YFRM_PKG_RSRC_ROOT}/${pth}")
+        add_custom_command(OUTPUT "${_out}"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${src}" "${_out}"
+            DEPENDS "${src}")
+        #add_dependencies(deploy_assets "${_out}")
     endif()
 endmacro()
 
@@ -78,7 +84,7 @@ include_directories(
     nccc/nccc/stubsupport
     ${CMAKE_CURRENT_BINARY_DIR})
 
-add_executable(em2app WIN32
+set(mainsrc
     launcher/duk/yuniduk.c
     launcher/duk/fakedlfcn.c
     launcher/duk/print/duk_print_alert.c
@@ -94,30 +100,54 @@ add_executable(em2app WIN32
     ${rsrcs}
     )
 
+if(WIN32 OR WINDOWS_STORE)
+    add_executable(em2app WIN32 ${mainsrc})
+elseif(ANDROID)
+    add_library(em2app SHARED ${mainsrc})
+else()
+    add_executable(em2app WIN32 ${mainsrc})
+endif()
+
+if("${YFRM_CWGL_BACKEND}" STREQUAL PlatformGLES)
+    set(gles_impl)
+else()
+    set(gles_impl angle_static)
+endif()
+
+set(fs_impl)
+
+if(WIN32 OR WINDOWS_STORE)
+    set(platform_deps
+        # SDL2 (Yuniframe)
+        user32
+        gdi32
+        winmm
+        imm32
+        ole32
+        oleaut32
+        version
+        uuid
+        advapi32
+        setupapi
+        shell32
+        dinput8
+
+        # angle (Yuniframe)
+        dxgi
+        dxguid
+
+        # dx11 (Yuniframe)
+        d3d11
+        )
+else()
+    set(platform_deps)
+endif()
+
 target_link_libraries(em2app
-    yfrm
-    angle_static
+    $<TARGET_OBJECTS:yfrm>
+    ${gles_impl}
+    ${fs_impl}
     SDL2-static
     ${appcode}
-
-    # SDL2 (Yuniframe)
-    user32
-    gdi32
-    winmm
-    imm32
-    ole32
-    oleaut32
-    version
-    uuid
-    advapi32
-    setupapi
-    shell32
-    dinput8
-
-    # angle (Yuniframe)
-    dxgi
-    dxguid
-
-    # dx11 (Yuniframe)
-    d3d11
+    ${platform_deps}
     )
