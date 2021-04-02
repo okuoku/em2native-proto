@@ -21,6 +21,7 @@ endif()
 
 set(rsrcs)
 add_custom_target(deploy_assets)
+set(asset_counter 0)
 macro(add_asset pth src)
     get_filename_component(_pthdir "${pth}" DIRECTORY)
     if(WINDOWS_STORE)
@@ -35,8 +36,11 @@ macro(add_asset pth src)
         add_custom_command(OUTPUT "${_out}"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${src}" "${_out}"
-            DEPENDS "${src}")
-        #add_dependencies(deploy_assets "${_out}")
+            DEPENDS "${src}"
+            COMMENT "Deploy ${src} => ${pth}")
+        add_custom_target(deploy_${asset_counter} DEPENDS "${_out}")
+        add_dependencies(deploy_assets deploy_${asset_counter})
+        math(EXPR asset_counter "${asset_counter}+1")
     endif()
 endmacro()
 
@@ -104,6 +108,7 @@ if(WIN32 OR WINDOWS_STORE)
     add_executable(em2app WIN32 ${mainsrc})
 elseif(ANDROID)
     add_library(em2app SHARED ${mainsrc})
+    add_dependencies(em2app deploy_assets)
 else()
     add_executable(em2app WIN32 ${mainsrc})
 endif()
