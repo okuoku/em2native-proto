@@ -6,15 +6,7 @@ project(GAME)
 # include(AndroidNdkModules)
 # android_ndk_import_module_cpufeatures()
 
-
-# SDL sources are in a subfolder named "SDL"
-add_subdirectory(SDL)
-
-# Compilation of companion libraries
-#add_subdirectory(SDL_image)
-#add_subdirectory(SDL_mixer)
-#add_subdirectory(SDL_ttf)
-
-# Your game and its CMakeLists.txt are in a subfolder named "src"
-add_subdirectory(src)
+set(YFRM_CWGL_BACKEND PlatformGLES)
+set(YFRM_PKG_RSRC_ROOT ${CMAKE_CURRENT_LIST_DIR}/../src/main/assets)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../../.. yfrm)
 
