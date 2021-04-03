@@ -1,6 +1,11 @@
 # For WindowsStore:
 #   cmake -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0
 
+# Tentative
+if(APPLE)
+    set(YFRM_CWGL_BACKEND PlatformGLES)
+endif()
+
 cmake_minimum_required(VERSION 3.1)
 project(em2capp C CXX)
 
