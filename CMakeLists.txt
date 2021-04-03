@@ -149,10 +149,19 @@ else()
 endif()
 
 target_link_libraries(em2app
-    $<TARGET_OBJECTS:yfrm>
     ${gles_impl}
     ${fs_impl}
     SDL2-static
     ${appcode}
     ${platform_deps}
     )
+if(${CMAKE_GENERATOR} STREQUAL Xcode)
+    target_link_libraries(em2app
+        yfrm
+        )
+else()
+    target_link_libraries(em2app
+        $<TARGET_OBJECTS:yfrm>
+        )
+endif()
+
