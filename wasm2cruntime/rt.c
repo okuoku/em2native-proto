@@ -12,6 +12,7 @@
 
 // FIXME: rename it
 #define WASM_RT_ADD_PREFIX(x) x
+void init(void);
 
 typedef void (*nccc_call_t)(const uint64_t* in, uint64_t* out);
 
