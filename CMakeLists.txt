@@ -4,10 +4,14 @@
 # Tentative
 if(APPLE)
     set(YFRM_CWGL_BACKEND PlatformGLES)
+    add_definitions(-DGLES_SILENCE_DEPRECATION)
+    set(maybe_objc OBJC OBJCXX)
+else()
+    set(maybe_objc)
 endif()
 
 cmake_minimum_required(VERSION 3.1)
-project(em2capp C CXX)
+project(em2capp C CXX ${maybe_objc})
 
 set(appname app1)
 
@@ -36,7 +40,15 @@ macro(add_asset pth src)
             PROPERTIES
             VS_DEPLOYMENT_CONTENT 1
             VS_DEPLOYMENT_LOCATION "${_pthdir}")
+    elseif(APPLE)
+        # Copy into bundle
+        list(APPEND rsrcs "${src}")
+        set_source_files_properties(
+            "${src}"
+            PROPERTIES
+            MACOSX_PACKAGE_LOCATION "Resources/${_pthdir}")
     elseif(YFRM_PKG_RSRC_ROOT)
+        # Copy resources to project root
         set(_out "${YFRM_PKG_RSRC_ROOT}/${pth}")
         add_custom_command(OUTPUT "${_out}"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -114,6 +126,18 @@ if(WIN32 OR WINDOWS_STORE)
 elseif(ANDROID)
     add_library(em2app SHARED ${mainsrc})
     add_dependencies(em2app deploy_assets)
+elseif(APPLE)
+    add_executable(em2app ${mainsrc})
+    set_target_properties(em2app
+        PROPERTIES
+        MACOSX_BUNDLE_BUNDLE_NAME em2app
+        MACOSX_BUNDLE_BUNDLE_VERSION 1.0
+        MACOSX_BUNDLE_SHORT_VERSION_STRING 1.0
+        MACOSX_BUNDLE_LONG_VERSION_STRING 1.0
+        MACOSX_BUNDLE_GUI_IDENTIFIER org.cltn.em2app
+        XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
+        XCODE_ATTRIBUTE_ENABLE_BITCODE "NO"
+        )
 else()
     add_executable(em2app WIN32 ${mainsrc})
 endif()
