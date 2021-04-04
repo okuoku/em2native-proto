@@ -196,7 +196,7 @@ target_link_libraries(em2app
     ${appcode}
     ${platform_deps}
     )
-if(${CMAKE_GENERATOR} STREQUAL Xcode)
+if(${CMAKE_GENERATOR} STREQUAL Xcode OR WIN32 OR WINDOWS_STORE)
     target_link_libraries(em2app
         yfrm
         )
