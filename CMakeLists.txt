@@ -3,8 +3,10 @@
 
 # Tentative
 if(APPLE)
-    set(YFRM_CWGL_BACKEND PlatformGLES)
-    add_definitions(-DGLES_SILENCE_DEPRECATION)
+    if(NOT YFRM_CWGL_BACKEND)
+        set(YFRM_CWGL_BACKEND PlatformGLES)
+        add_definitions(-DGLES_SILENCE_DEPRECATION)
+    endif()
     set(maybe_objc OBJC OBJCXX)
 else()
     set(maybe_objc)
@@ -127,7 +129,7 @@ elseif(ANDROID)
     add_library(em2app SHARED ${mainsrc})
     add_dependencies(em2app deploy_assets)
 elseif(APPLE)
-    add_executable(em2app ${mainsrc})
+    add_executable(em2app MACOSX_BUNDLE ${mainsrc})
     set_target_properties(em2app
         PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME em2app
@@ -173,8 +175,18 @@ if(WIN32 OR WINDOWS_STORE)
         # dx11 (Yuniframe)
         d3d11
         )
-else()
-    set(platform_deps)
+else(YFRM_CWGL_USE_METAL)
+    # FIXME: Pass these from yuniframe
+    set(platform_deps
+        "-framework QuartzCore" # for CALayer
+        "-framework Metal"
+        "-framework IOSurface"
+        spirv-cross-msl
+        SPIRV-Tools
+        glslang
+        glslang-default-resource-limits
+        SPIRV
+        )
 endif()
 
 target_link_libraries(em2app
