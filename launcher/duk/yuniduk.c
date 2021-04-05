@@ -140,6 +140,10 @@ initprefix(void){
         yfrm_file_set_prefix0(p);
     }
 }
+#elif defined(SET_PKGNAME)
+static void initprefix(void){
+    yfrm_file_configure0(SET_PKGNAME);
+}
 #else
 static void initprefix(void){
 }

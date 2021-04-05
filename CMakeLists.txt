@@ -30,6 +30,10 @@ else()
     set(appcode ${${appname}_APPCODE})
 endif()
 
+if(WIN32)
+    set(YFRM_PKG_RSRC_ROOT ${CMAKE_CURRENT_BINARY_DIR}/${appname})
+endif()
+
 set(rsrcs)
 add_custom_target(deploy_assets)
 set(asset_counter 0)
@@ -97,6 +101,8 @@ endif()
 # FIXME: Workaround for UWP
 if(WINDOWS_STORE)
     add_definitions(-DSET_SDL_PKG_PATH_PREFIX)
+elseif(WIN32)
+    add_definitions(-DSET_PKGNAME=\"${appname}\")
 endif()
 
 # NCCC stub generation
@@ -123,8 +129,11 @@ set(mainsrc
     ${rsrcs}
     )
 
-if(WIN32 OR WINDOWS_STORE)
+if(WINDOWS_STORE)
     add_executable(em2app WIN32 ${mainsrc})
+elseif(WIN32)
+    add_executable(em2app WIN32 ${mainsrc})
+    add_dependencies(em2app deploy_assets)
 elseif(ANDROID)
     add_library(em2app SHARED ${mainsrc})
     add_dependencies(em2app deploy_assets)
