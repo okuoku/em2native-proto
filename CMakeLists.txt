@@ -31,7 +31,7 @@ else()
 endif()
 
 if(WIN32)
-    set(YFRM_PKG_RSRC_ROOT ${CMAKE_CURRENT_BINARY_DIR}/${appname})
+    set(YFRM_PKG_RSRC_ROOT ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${appname})
 endif()
 
 set(rsrcs)
