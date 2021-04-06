@@ -15,6 +15,10 @@ endif()
 cmake_minimum_required(VERSION 3.1)
 project(em2capp C CXX ${maybe_objc})
 
+if(MSVC)
+    add_compile_options(/MP)
+endif()
+
 set(appname app1)
 
 include(./duk-srcs.cmake)
