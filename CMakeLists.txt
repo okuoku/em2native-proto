@@ -39,8 +39,7 @@ if(WIN32)
 endif()
 
 set(rsrcs)
-add_custom_target(deploy_assets)
-set(asset_counter 0)
+set(asset_dests)
 macro(add_asset pth src)
     get_filename_component(_pthdir "${pth}" DIRECTORY)
     if(WINDOWS_STORE)
@@ -65,9 +64,7 @@ macro(add_asset pth src)
             "${src}" "${_out}"
             DEPENDS "${src}"
             COMMENT "Deploy ${src} => ${pth}")
-        add_custom_target(deploy_${asset_counter} DEPENDS "${_out}")
-        add_dependencies(deploy_assets deploy_${asset_counter})
-        math(EXPR asset_counter "${asset_counter}+1")
+        list(APPEND asset_dests "${_out}")
     endif()
 endmacro()
 
@@ -82,6 +79,10 @@ get_filename_component(jsname "${${appname}_JS}" NAME)
 add_asset("${appname}/${jsname}" "${${appname}_JS}")
 get_filename_component(wasmname "${${appname}_WASM}" NAME)
 add_asset("${appname}/${wasmname}" "${${appname}_WASM}")
+
+if(asset_dests)
+    add_custom_target(deploy_assets DEPENDS ${asset_dests})
+endif()
 
 include_directories(
     launcher/duk/print
