@@ -189,7 +189,7 @@ if(WIN32 OR WINDOWS_STORE)
         # dx11 (Yuniframe)
         d3d11
         )
-else(YFRM_CWGL_USE_METAL)
+elseif(YFRM_CWGL_USE_METAL)
     # FIXME: Pass these from yuniframe
     set(platform_deps
         "-framework QuartzCore" # for CALayer
@@ -203,13 +203,6 @@ else(YFRM_CWGL_USE_METAL)
         )
 endif()
 
-target_link_libraries(em2app
-    ${gles_impl}
-    ${fs_impl}
-    SDL2-static
-    ${appcode}
-    ${platform_deps}
-    )
 if(${CMAKE_GENERATOR} STREQUAL Xcode OR WIN32 OR WINDOWS_STORE)
     target_link_libraries(em2app
         yfrm
@@ -220,3 +213,10 @@ else()
         )
 endif()
 
+target_link_libraries(em2app
+    ${gles_impl}
+    ${fs_impl}
+    ${appcode}
+    SDL2-static
+    ${platform_deps}
+    )
