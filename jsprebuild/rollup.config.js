@@ -2,7 +2,7 @@ import { babel } from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 
 const config_duktape = {
-    input: "index.js",
+    input: "../runtime/index.js",
     output: {
         dir: "output-duk",
         format: "iife",

@@ -74,7 +74,7 @@ endforeach()
 
 add_asset("promise-polyfill.min.js" "${CMAKE_CURRENT_LIST_DIR}/runtime/promise-polyfill.min.js")
 add_asset("bootstrap.js" "${CMAKE_CURRENT_LIST_DIR}/launcher/duk/bootstrap.js")
-add_asset("index.js" "${CMAKE_CURRENT_LIST_DIR}/runtime/output-duk/index.js")
+add_asset("index.js" "${CMAKE_CURRENT_LIST_DIR}/jsprebuild/output-duk/index.js")
 get_filename_component(jsname "${${appname}_JS}" NAME)
 add_asset("${appname}/${jsname}" "${${appname}_JS}")
 get_filename_component(wasmname "${${appname}_WASM}" NAME)
