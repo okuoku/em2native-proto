@@ -1,7 +1,7 @@
 import ncccutil from "./ncccutil.js";
 
-const cwgl0 = ncccutil.opendll_null("../out/build/x64-Debug/cwgl.dll");
-const yfrmdll = ncccutil.opendll("../out/build/x64-Debug/ncccstubs/yfrm_stubs.dll", "yfrm"); /* Both yfrm and cwgl */
+const cwgl0 = ncccutil.opendll_null("./yfrm.dll");
+const yfrmdll = ncccutil.opendll("./nccc_yfrm.dll", "yfrm"); /* Both yfrm and cwgl */
 
 // Types
 const cwglCtx = null;

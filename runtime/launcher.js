@@ -521,6 +521,7 @@ function launch(config){
         const preamble = "function peekFS(){return FS;} Module.peekFS = peekFS; \n\n";
 
         const binds = {
+            __dirname: "",
             WebAssembly: WebAssembly,
             window: global.my_window,
             navigator: global.my_window.navigator,
