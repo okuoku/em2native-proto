@@ -56,7 +56,7 @@ const APPFS_DIR = "app7/appfs";
 const DLLFILE = "../apps/out/appdll_app7.dll";
 */
 
-import launch from "./launcher.js";
+import launch from "./launcher.mjs";
 
 launch({
        BOOTPROTOCOL: BOOTPROTOCOL,

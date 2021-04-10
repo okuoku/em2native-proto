@@ -1,4 +1,4 @@
-import ncccutil from "./ncccutil.js";
+import ncccutil from "./ncccutil.mjs";
 
 const node_nccc = ncccutil.node_nccc;
 const util_rawcall = ncccutil.rawcall;

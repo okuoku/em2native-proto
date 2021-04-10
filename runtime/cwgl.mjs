@@ -1,4 +1,4 @@
-import ncccutil from "./ncccutil.js";
+import ncccutil from "./ncccutil.mjs";
 
 const cwgl0 = ncccutil.opendll_null("./yfrm.dll");
 const yfrmdll = ncccutil.opendll("./nccc_yfrm.dll", "yfrm"); /* Both yfrm and cwgl */

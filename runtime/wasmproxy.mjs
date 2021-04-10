@@ -1,5 +1,5 @@
-import ncccutil from "./ncccutil.js";
-import nccc_node from "./nccc-node.js";
+import ncccutil from "./ncccutil.mjs";
+import nccc_node from "./nccc-node.mjs";
 
 
 const wasm = function(DLLFILE){ 

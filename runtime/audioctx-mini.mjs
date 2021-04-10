@@ -1,4 +1,4 @@
-import PortStd from "./port-std.js";
+import PortStd from "./port-std.mjs";
 
 function dummybuffer(){
     return {};

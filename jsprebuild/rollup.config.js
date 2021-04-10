@@ -14,7 +14,7 @@ const config_duktape = {
               presets: [ "@babel/preset-env"]
         })
     ],
-    external: ["./port-std.js", "./port-native.js"]
+    external: ["./port-std.mjs", "./port-native.mjs"]
 };
 
 export default config_duktape;

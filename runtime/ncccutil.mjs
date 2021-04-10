@@ -1,4 +1,4 @@
-import PortNative from "./port-native.js";
+import PortNative from "./port-native.mjs";
 const corelib = PortNative.nccc.corelib;
 const node_nccc = PortNative.nccc;
 

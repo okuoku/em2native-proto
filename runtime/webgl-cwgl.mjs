@@ -1,7 +1,7 @@
-import CWGL from "./cwgl.js";
-import E from "./glenums.js";
-import getenumtype from "./getenumtype.js";
-import ncccutil from "./ncccutil.js";
+import CWGL from "./cwgl.mjs";
+import E from "./glenums.mjs";
+import getenumtype from "./getenumtype.mjs";
+import ncccutil from "./ncccutil.mjs";
 
 const NULL = 0;
 

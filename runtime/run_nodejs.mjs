@@ -52,7 +52,7 @@ const DLLFILE = "../apps/out/appdll_app7.dll";
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
-import launch from "./launcher.js";
+import launch from "./launcher.mjs";
 const path = require("path");
 
 const TESTAPPROOT = path.dirname(import.meta.url) + "/../app/testapp";
