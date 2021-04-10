@@ -1,4 +1,4 @@
-import "regenerator-runtime/runtime.js";
+import "./regenerator.runtime.min.js";
 import PortStd from "./port-std.js";
 import GL from "./webgl-cwgl.js";
 import audioctx_mini from "./audioctx-mini.js";
