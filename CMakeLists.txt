@@ -199,7 +199,7 @@ elseif(YFRM_CWGL_USE_METAL)
         spirv-cross-msl
         SPIRV-Tools
         glslang
-        glslang-default-resource-limits
+        my-glslang-default-resource-limits
         SPIRV
         )
 endif()
