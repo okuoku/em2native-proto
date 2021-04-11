@@ -8,6 +8,11 @@ if(APPLE)
         add_definitions(-DGLES_SILENCE_DEPRECATION)
     else()
         set(YFRM_CWGL_USE_METAL ON)
+        # Configure SDL
+        set(VIDEO_OPENGLES OFF CACHE BOOL "" FORCE)
+        set(VIDEO_VULKAN OFF CACHE BOOL "" FORCE)
+        set(HAVE_HIDAPI OFF CACHE BOOL "" FORCE)
+        set(HIDAPI OFF CACHE BOOL "" FORCE)
     endif()
 endif()
 
@@ -150,8 +155,7 @@ elseif(APPLE)
         MACOSX_BUNDLE_SHORT_VERSION_STRING 1.0
         MACOSX_BUNDLE_LONG_VERSION_STRING 1.0
         MACOSX_BUNDLE_GUI_IDENTIFIER org.cltn.em2app
-        XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
-        XCODE_ATTRIBUTE_ENABLE_BITCODE "NO"
+        #XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
         # Both iPad and iPhone
         XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
         )
@@ -196,6 +200,20 @@ elseif(YFRM_CWGL_USE_METAL)
         "-framework QuartzCore" # for CALayer
         "-framework Metal"
         "-framework IOSurface"
+        "-framework CoreVideo"
+        "-framework CoreAudio"
+        "-framework AudioToolbox"
+        "-framework AVFoundation"
+        #"-framework CoreBluetooth"
+        "-framework CoreGraphics"
+        "-framework CoreMotion"
+        "-framework Foundation"
+        "-framework GameController"
+        #"-framework OpenGLES"
+        "-framework UIKit"
+        "-framework CoreHaptics"
+        m
+        iconv
         spirv-cross-msl
         SPIRV-Tools
         glslang
@@ -218,6 +236,7 @@ target_link_libraries(em2app
     ${gles_impl}
     ${fs_impl}
     ${appcode}
-    SDL2-static
+    $<TARGET_FILE:SDL2-static> # Hack: Omit link flags
     ${platform_deps}
     )
+add_dependencies(em2app SDL2-static)
