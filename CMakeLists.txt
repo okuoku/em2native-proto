@@ -152,6 +152,8 @@ elseif(APPLE)
         MACOSX_BUNDLE_GUI_IDENTIFIER org.cltn.em2app
         XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
         XCODE_ATTRIBUTE_ENABLE_BITCODE "NO"
+        # Both iPad and iPhone
+        XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
         )
 else()
     add_executable(em2app WIN32 ${mainsrc})
