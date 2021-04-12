@@ -23,7 +23,7 @@ if(MSVC)
     add_compile_options(/MP)
 endif()
 
-set(appname app1)
+set(appname app8)
 
 include(./duk-srcs.cmake)
 include(./${appname}-files.cmake)
