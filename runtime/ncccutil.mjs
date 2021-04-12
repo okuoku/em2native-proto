@@ -309,4 +309,5 @@ export default {
     wrapptr: wrapptr,
     ptrbuf: ptrbuf,
     fetchptrbuf: fetchptrbuf,
+    corelib: corelib
 };

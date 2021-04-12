@@ -1,5 +1,6 @@
 import ncccutil from "./ncccutil.mjs";
 
+const corelib = ncccutil.corelib;
 const node_nccc = ncccutil.node_nccc;
 const util_rawcall = ncccutil.rawcall;
 const util_malloc = ncccutil.malloc;
@@ -437,6 +438,9 @@ function nccc(DLLPATH){
             // FIXME: Retain reference..?
             library_set_import_fn(idx, cba[0], cba[1]);
         }
+        function attach_intrinsic(addr){
+            library_set_import_fn(idx, corelib.util_shortcircuit, addr);
+        }
         function attach_memory(mem){
             const current_pages = mem.__wasmproxy_current_page();
             const max_pages = 32768;
@@ -482,7 +486,8 @@ function nccc(DLLPATH){
         }
 
         imports[name0][name1] = {
-            attach: attach
+            attach: attach,
+            attach_intrinsic: attach_intrinsic
         };
     }
 

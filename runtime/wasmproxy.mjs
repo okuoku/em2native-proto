@@ -1,6 +1,7 @@
 import ncccutil from "./ncccutil.mjs";
 import nccc_node from "./nccc-node.mjs";
 
+const corelib = ncccutil.corelib;
 
 const wasm = function(DLLFILE){ 
 
@@ -93,10 +94,31 @@ const wasm = function(DLLFILE){
         };
 
         /* linkup imports */
+        corelib.wasm_cos = corelib.math_cos;
+        corelib.wasm_sin = corelib.math_sin;
+        corelib.wasm_atan2 = corelib.math_atan2;
+        corelib.wasm_sqrt = corelib.math_sqrt;
+        corelib.wasm_pow = corelib.math_pow;
+        corelib.wasm_fmodf = corelib.math_fmodf;
         Object.keys(imports).forEach(name0 => {
             Object.keys(imports[name0]).forEach(name1 => {
                 if(nccc.imports[name0] && nccc.imports[name0][name1]){
                     //console.log("Import",name0,name1,imports[name0][name1]);
+                    if(name0 == "env"){
+                        // FIXME: Intrinsic for tt. Make it optional.
+                        switch(name1){
+                            case "wasm_cos":
+                            case "wasm_sin":
+                            case "wasm_atan2":
+                            case "wasm_sqrt":
+                            case "wasm_pow":
+                            case "wasm_fmodf":
+                                console.log("Intrinsic",name1,corelib[name1]);
+                                nccc.imports[name0][name1]
+                                    .attach_intrinsic(corelib[name1]);
+                                return;
+                        }
+                    }
                     nccc.imports[name0][name1].attach(imports[name0][name1]);
                 }else{
                     //console.log("Skip import",name0,name1);
