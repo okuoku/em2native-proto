@@ -67,8 +67,8 @@ const DLLFILE = "../apps/out/appdll_app.dll";
 */
 
 const BOOTPROTOCOL = "tt";
-const BOOTSTRAP = "c:/cygwin64/home/oku/repos/tt/web/tt.js";
-const BOOTWASM = "c:/cygwin64/home/oku/repos/tt/web/tt.wasm";
+const BOOTSTRAP = new URL(TESTAPPROOT + "/app8/tt.js");
+const BOOTWASM = new URL(TESTAPPROOT + "/app8/tt.wasm");
 const BOOTARGS = [];
 const APPFS_DIR = false;
 const DLLFILE = false;
