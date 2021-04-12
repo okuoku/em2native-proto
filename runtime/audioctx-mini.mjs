@@ -51,12 +51,12 @@ function audioctx_mini(){
 
     function graphupdate(){
         streamnode = false;
-        console.log("Audio graph updated", the_context.destination);
+        //console.log("Audio graph updated", the_context.destination);
         nodeforeach(the_context.destination.__nodesources,
                     function(id, node){
-                        console.log("connected", id);
+                        //console.log("connected", id);
                         if(node.__nodetype == "scriptprocessor"){
-                            console.log("streaming node", node);
+                            //console.log("streaming node", node);
                             streamnode = node;
                         }
                     });
@@ -73,7 +73,7 @@ function audioctx_mini(){
                 if(! node.__nodetype){
                     console.log("Trying to connect unsupported node (or param)", node);
                 }else{
-                    console.log("Connect", node);
+                    //console.log("Connect", node);
                     me.__nodesinks[node.__nodeid] = node;
                     node.__nodesources[me.__nodeid] = me;
                     graphupdated = true;
@@ -182,6 +182,7 @@ function audioctx_mini(){
             node.playbackRate = {};
             node.playbackRate.value = 1;
             node.start = function(){};
+            node.stop = function(){};
             return node;
         },
         /*
