@@ -122,6 +122,9 @@ const wasm = function(DLLFILE){
                         case "table":
                             exports[name] = table;
                             break;
+                        case "u32":
+                            console.log("Ignored.", name);
+                            break;
                         default:
                             throw "Invalid value export!";
                     }
