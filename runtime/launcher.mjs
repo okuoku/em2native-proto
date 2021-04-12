@@ -146,9 +146,39 @@ function launch(config){
         const keycode = buf[offs+2];
         const flags = buf[offs+3];
         const keyname = buf[offs+4];
-        //console.log(name, String.fromCharCode([keyname]));
+        //console.log(name, keycode, String.fromCharCode([keyname]));
+        // Just for TT
+        let keystr = "unknown";
+        switch(keycode){
+            case 38:
+                keystr = "ArrowUp";
+                break;
+            case 40:
+                keystr = "ArrowDown";
+                break;
+            case 37:
+                keystr = "ArrowLeft";
+                break;
+            case 39:
+                keystr = "ArrowRight";
+                break;
+
+            case 88:
+                keystr = "KeyX";
+                break;
+            case 67:
+                keystr = "KeyC";
+                break;
+            case 80:
+                keystr = "KeyP";
+                break;
+            case 27:
+                keystr = "Escape";
+                break;
+        }
         const evt = {
             key: String.fromCharCode([keyname]),
+            code: keystr,
             keyCode: keycode,
             which: keycode,
             altKey: flags & 8 ? true : false,
@@ -640,6 +670,83 @@ function launch(config){
         });
     }
 
+    function boot_tt(){ // simple fetch and run
+        const bootstrap = bootstrap_script();
+        const wasmBinary = bootstrap_wasm();
+        let readstep = false;
+        let loop = false;
+
+        const binds = {
+            // Defined in index.htm
+            id: null,
+            exports: null,
+            onProgress: function() {},
+            onResize: function() {},
+            onLoad: function() {
+                my_window.requestAnimationFrame(loop);
+            },
+            onStart: function() {},
+
+            // Fake localStorage ..?
+            localStorage: {
+                getItem: function(name){
+                    return false;
+                },
+                setItem: function(name){
+                    return false;
+                },
+            },
+
+            // Fake DOM
+            fetch: async function(bogus){
+                console.log("Fake fetch", bogus);
+                return {
+                    body: {
+                        getReader: function (){
+                            return {
+                                read: async function (){
+                                    if(! readstep){
+                                        readstep = true;
+                                        return { // Chunk
+                                            done: false,
+                                            value: wasmBinary,
+                                        }
+                                    }else{
+                                        return { // Result
+                                            done: true,
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            requestAnimationFrame: my_window.requestAnimationFrame,
+            WebAssembly: WebAssembly,
+            window: global.my_window,
+            navigator: global.my_window.navigator,
+            document: global.my_doc,
+            screen: global.my_screen,
+            setTimeout: global.fake_settimeout,
+            AudioContext: global.my_window.AudioContext,
+
+        };
+
+        global.my_doc.getElementById = function (name){
+            switch(name){
+                default:
+                case "loading":
+                    return null;
+                case "screen":
+                    return my_canvas;
+            }
+        }
+
+        bindeval(bootstrap + "\n\n global.loop = loop;", binds);
+        loop = global.loop;
+    }
+
     function boot(){
         switch(BOOTPROTOCOL){
             case "unity":
@@ -650,6 +757,9 @@ function launch(config){
                 break;
             case "godot":
                 boot_godot();
+                break;
+            case "tt":
+                boot_tt();
                 break;
             default:
                 throw "unknown boot protocol";
