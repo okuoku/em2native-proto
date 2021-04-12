@@ -271,6 +271,10 @@ const __ported_cwgl = {
     // cwgl_getUniform_m2
     // cwgl_getUniform_m3
     // cwgl_getUniform_m4
+
+    // VAO
+    cwgl_createVertexArray: false,
+    cwgl_bindVertexArray: false
 };
 
 const __ported_yfrm = {

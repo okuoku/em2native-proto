@@ -979,9 +979,32 @@ function GL(w, h, attr){
         },
         // 5.14.14 Detecting and enabling extensions
         getSupportedExtensions: function(){
-            return ["OES_element_index_uint"];
+            return ["OES_element_index_uint", "OES_vertex_array_object"];
         },
         getExtension: function(name){
+            switch(name){
+                default:
+                    return null;
+                case "OES_vertex_array_object":
+                    return {
+                        VERTEX_ARRAY_BINDING_OES: 0x85B5,
+                        createVertexArrayOES: function(){
+                            let ptr0 = CWGL.cwgl_createVertexArray(ctx);
+                            const ptr = wrapPointer(ptr0, "should not happen");
+                            const r = {ptr: ptr};
+                            return r;
+                        },
+                        deleteVertexArrayOES: "UNIMPL",
+                        isVertexArrayOES: "UNIMPL",
+                        bindVertexArrayOES: function(arrayObject){
+                            if(! arrayObject){
+                                CWGL.cwgl_bindVertexArray(ctx, NULL);
+                            }else{
+                                CWGL.cwgl_bindVertexArray(ctx, arrayObject.ptr);
+                            }
+                        }
+                    };
+            }
             return null;
         },
 
