@@ -172,7 +172,18 @@ endif()
 set(fs_impl)
 
 if(WIN32 OR WINDOWS_STORE)
+    if(WINDOWS_STORE)
+        set(winrt_add
+            -nodefaultlib:vccorlib$<$<CONFIG:Debug>:d>
+            -nodefaultlib:msvcrt$<$<CONFIG:Debug>:d>
+            vccorlib$<$<CONFIG:Debug>:d>.lib
+            msvcrt$<$<CONFIG:Debug>:d>.lib
+            )
+    else()
+        set(winrt_add)
+    endif()
     set(platform_deps
+        ${winrt_add}
         # SDL2 (Yuniframe)
         user32
         gdi32
