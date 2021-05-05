@@ -50,6 +50,7 @@ const DLLFILE = "../apps/out/appdll_app7.dll";
 */
 
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
 const require = createRequire(import.meta.url);
 
 import launch from "./launcher.mjs";
@@ -57,22 +58,40 @@ const path = require("path");
 
 const TESTAPPROOT = path.dirname(import.meta.url) + "/../app/testapp";
 
+function topath(pth){
+    let url = new URL(TESTAPPROOT + pth);
+    return fileURLToPath(url);
+}
+
 /*
 const BOOTPROTOCOL = "plain";
 const BOOTSTRAP = new URL(TESTAPPROOT + "/app1/example_emscripten_opengl3.js");
 const BOOTWASM = new URL(TESTAPPROOT + "/app1/example_emscripten_opengl3.wasm");
 const BOOTARGS = [];
 const APPFS_DIR = false;
-const DLLFILE = "../apps/out/appdll_app.dll";
 */
 
+/*
 const BOOTPROTOCOL = "tt";
 const BOOTSTRAP = new URL(TESTAPPROOT + "/app8/tt.js");
 const BOOTWASM = new URL(TESTAPPROOT + "/app8/tt.wasm");
 const BOOTARGS = [];
 const APPFS_DIR = false;
-const DLLFILE = false;
+*/
 
+/*
+const BOOTPROTOCOL = "unity";
+const BOOTSTRAP = new URL(TESTAPPROOT + "/app7/webgl.framework.js");
+const BOOTWASM = new URL(TESTAPPROOT + "/app7/webgl.wasm");
+const BOOTARGS = [];
+const APPFS_DIR = topath("/app7/appfs");
+*/
+
+const BOOTPROTOCOL = "unity";
+const BOOTSTRAP = new URL(TESTAPPROOT + "/app2/gltest2.framework.js");
+const BOOTWASM = new URL(TESTAPPROOT + "/app2/gltest2.wasm");
+const BOOTARGS = [];
+const APPFS_DIR = topath("/app2/appfs");
 
 launch({
        BOOTPROTOCOL: BOOTPROTOCOL,
