@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(em2nodejs)
 
+if(MSVC)
+    add_compile_options(/MP)
+endif()
+
 set(NODENCCC_DEBUG_COPY ${CMAKE_CURRENT_BINARY_DIR})
 add_subdirectory(../nccc/nccc/javascript/node-nccc node-nccc)
 
@@ -31,3 +35,10 @@ add_library(nccc_yfrm MODULE
     ../launcher/nccc/stublead.cwgl.c
     )
 target_link_libraries(nccc_yfrm yfrm)
+
+# Debug copy
+add_custom_command(TARGET nccc_yfrm POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    "$<TARGET_FILE:nccc_yfrm>"
+    "${YFRM_DEBUG_COPY}"
+    )
