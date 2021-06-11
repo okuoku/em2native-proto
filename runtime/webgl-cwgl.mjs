@@ -43,6 +43,15 @@ function GL(w, h, attr){
         currentRenderbuffer = rb;
     }
 
+    function consumestring(s){ // => string
+        const ssiz = CWGL.cwgl_string_size(ctx, s);
+        const buf = new Uint8Array(ssiz+1);
+        CWGL.cwgl_string_read(ctx, s, buf, ssiz);
+        CWGL.cwgl_string_release(ctx, s);
+        buf[ssiz] = 0;
+        return readcstr(buf);
+    }
+
     let currentTexture2D = null;
     let currentTextureCubeMap = null
     function trackbinding_texture(target, texture){
@@ -304,11 +313,7 @@ function GL(w, h, attr){
                         if(r == 0){
                             const s = ptrref(p0);
                             ptrfree(p0);
-                            const ssiz = CWGL.cwgl_string_size(ctx, s);
-                            const buf = new Uint8Array(ssiz);
-                            CWGL.cwgl_string_read(ctx, s, buf, ssiz);
-                            CWGL.cwgl_string_release(ctx, s);
-                            return readcstr(buf);
+                            return consumestring(s);
                         }else{
                             return null;
                         }
@@ -693,15 +698,7 @@ function GL(w, h, attr){
         },
         getProgramInfoLog: function(program){
             const s = CWGL.cwgl_getProgramInfoLog(ctx, program.ptr);
-            const ssiz = CWGL.cwgl_string_size(ctx, s);
-            const buf = new Uint8Array(ssiz);
-            const r = CWGL.cwgl_string_read(ctx, s, buf, ssiz);
-            CWGL.cwgl_string_release(ctx, s);
-            if(r == 0){
-                return readcstr(buf);
-            }else{
-                return null;
-            }
+            return consumestring(s);
         },
         getShaderParameter: function(shader, pname){
             const type = getenumtype(pname);
@@ -742,27 +739,11 @@ function GL(w, h, attr){
         },
         getShaderInfoLog: function(shader){
             const s = CWGL.cwgl_getShaderInfoLog(ctx, shader);
-            const ssiz = CWGL.cwgl_string_size(ctx, s);
-            const buf = new Uint8Array(ssiz);
-            const r = CWGL.cwgl_string_read(ctx, s, buf, ssiz);
-            CWGL.cwgl_string_release(ctx, s);
-            if(r == 0){
-                return readcstr(buf);
-            }else{
-                return null;
-            }
+            return consumestring(s);
         },
         getShaderSource: function(shader){
             const s = CWGL.cwgl_getShaderSource(ctx, shader);
-            const ssiz = CWGL.cwgl_string_size(ctx, s);
-            const buf = new Uint8Array(ssiz);
-            const r = CWGL.cwgl_string_read(ctx, s, buf, ssiz);
-            CWGL.cwgl_string_release(ctx, s);
-            if(r == 0){
-                return readcstr(buf);
-            }else{
-                return null;
-            }
+            return consumestring(s);
         },
         /* WebGLHandlesContextLoss */
         isProgram: function(program){
@@ -816,11 +797,7 @@ function GL(w, h, attr){
             if(r == 0){
                 const s = ptrref(p0);
                 ptrfree(p0);
-                const ssiz = CWGL.cwgl_string_size(ctx, s);
-                const buf = new Uint8Array(ssiz);
-                CWGL.cwgl_string_read(ctx, s, buf, ssiz);
-                CWGL.cwgl_string_release(ctx, s);
-                const name = readcstr(buf);
+                const name = consumestring(s);
                 return {
                     size: i0[0],
                     type: i1[0],
