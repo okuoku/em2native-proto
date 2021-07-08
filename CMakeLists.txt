@@ -23,7 +23,11 @@ if(MSVC)
     add_compile_options(/MP)
 endif()
 
-set(appname app8)
+if(EM2C_APPNAME)
+    set(appname ${EM2C_APPNAME})
+else()
+    set(appname app8)
+endif()
 
 include(./duk-srcs.cmake)
 include(./${appname}-files.cmake)
