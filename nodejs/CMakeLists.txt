@@ -5,6 +5,12 @@ if(MSVC)
     add_compile_options(/MP)
 endif()
 
+if(YFRM_CWGL_USE_PVRVFRAME)
+    link_directories(
+        "C:/Imagination Technologies/PowerVR_Graphics/PowerVR_Tools/PVRVFrame/Library/Windows_x86_64"
+        )
+endif()
+
 set(NODENCCC_DEBUG_COPY ${CMAKE_CURRENT_BINARY_DIR})
 add_subdirectory(../nccc/nccc/javascript/node-nccc node-nccc)
 
