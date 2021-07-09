@@ -63,13 +63,11 @@ function topath(pth){
     return fileURLToPath(url);
 }
 
-/*
 const BOOTPROTOCOL = "plain";
 const BOOTSTRAP = new URL(TESTAPPROOT + "/app1/example_emscripten_opengl3.js");
 const BOOTWASM = new URL(TESTAPPROOT + "/app1/example_emscripten_opengl3.wasm");
 const BOOTARGS = [];
 const APPFS_DIR = false;
-*/
 
 /*
 const BOOTPROTOCOL = "tt";
@@ -87,11 +85,13 @@ const BOOTARGS = [];
 const APPFS_DIR = topath("/app7/appfs");
 */
 
+/*
 const BOOTPROTOCOL = "unity";
 const BOOTSTRAP = new URL(TESTAPPROOT + "/app2/gltest2.framework.js");
 const BOOTWASM = new URL(TESTAPPROOT + "/app2/gltest2.wasm");
 const BOOTARGS = [];
 const APPFS_DIR = topath("/app2/appfs");
+*/
 
 launch({
        BOOTPROTOCOL: BOOTPROTOCOL,

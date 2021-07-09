@@ -15,14 +15,12 @@ const APPFS_DIR = "app4/appfs";
 const DLLFILE = "../apps/out/appdll_app4.dll";
 */
 
-/*
 const BOOTPROTOCOL = "plain";
 const BOOTSTRAP = "app1/example_emscripten_opengl3.js";
 const BOOTWASM = "app1/example_emscripten_opengl3.wasm";
 const BOOTARGS = [];
 const APPFS_DIR = false;
 const DLLFILE = "../apps/out/appdll_app.dll";
-*/
 
 /*
 const BOOTPROTOCOL = "unity";
@@ -58,12 +56,15 @@ const APPFS_DIR = "app7/appfs";
 const DLLFILE = "../apps/out/appdll_app7.dll";
 */
 
+/*
 const BOOTPROTOCOL = "tt";
 const BOOTSTRAP = "app8/tt.js";
 const BOOTWASM = "app8/tt.wasm";
 const BOOTARGS = [];
 const APPFS_DIR = false;
 const DLLFILE = "../apps/out/appdll_app.dll";
+*/
+
 import launch from "./launcher.mjs";
 
 launch({
