@@ -51,7 +51,7 @@ function GL(w, h, attr){
         }
         //const buf = new Uint8Array(ssiz+1);
         const buf = ncccutil.malloc(ssiz+1);
-        CWGL.cwgl_string_read(ctx, s, buf, ssiz);
+        CWGL.cwgl_string_read(ctx, s, buf, ssiz+1);
         CWGL.cwgl_string_release(ctx, s);
         //buf[ssiz] = 0;
         //return readcstr(buf);
