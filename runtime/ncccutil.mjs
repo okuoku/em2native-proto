@@ -6,6 +6,7 @@ const util_rawcall_addr = corelib.util_rawcall;
 const util_peek_u64_addr = corelib.util_peek_u64;
 const util_poke_u64_addr = corelib.util_poke_u64;
 const util_peek_u32_addr = corelib.util_peek_u32;
+const util_peek_u8_addr = corelib.util_peek_u8;
 const util_poke_u32_addr = corelib.util_poke_u32;
 const util_peek_ptr_addr = corelib.util_peek_ptr;
 const util_malloc_addr = corelib.util_malloc;
@@ -27,6 +28,9 @@ const util_peek_u64 = node_nccc.make_nccc_call("peek_u64",
 const util_peek_u32 = node_nccc.make_nccc_call("peek_u32",
                                                0, util_peek_u32_addr,
                                                "p", "l");
+const util_peek_u8 = node_nccc.make_nccc_call("peek_u8",
+                                              0, util_peek_u8_addr,
+                                              "p", "l");
 const util_peek_f64 = node_nccc.make_nccc_call("peek_f64", // reinterpret
                                                0, util_peek_u64_addr,
                                                "p", "d");
@@ -81,28 +85,8 @@ function fetchbyte(addr){
     if(addr == 0){
         throw "Invalid address";
     }
-    const resid = addr % 4;
-    const peekaddr = addr - resid;
-    const v = util_peek_u32(peekaddr);
-    let out = 0;
-    switch(resid){
-        case 0:
-            out = v & 0xff;
-            break;
-        case 1:
-            out = v >> 8;
-            out = out & 0xff;
-            break;
-        case 2:
-            out = v >> 16;
-            out = out & 0xff;
-            break;
-        case 3:
-            out = v >> 24;
-            out = out & 0xff;
-            break;
-    }
-    return out;
+    const v = util_peek_u8(addr);
+    return v;
 }
 
 function fetchcstring(addr){
@@ -300,6 +284,7 @@ export default {
     addrptr: util_addrptr,
     peek_u64: util_peek_u64,
     peek_u32: util_peek_u32,
+    peek_u8: util_peek_u8,
     peek_f64: util_peek_f64,
     peek_f32: util_peek_f32,
     peek_ptr: util_peek_ptr,
