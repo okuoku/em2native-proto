@@ -44,12 +44,20 @@ function GL(w, h, attr){
     }
 
     function consumestring(s){ // => string
+        // FIXME: On Duktape, Uint8Array freed during readcstr...?
         const ssiz = CWGL.cwgl_string_size(ctx, s);
-        const buf = new Uint8Array(ssiz+1);
+        if(ssiz == 0){
+            return ""; // Short circuit
+        }
+        //const buf = new Uint8Array(ssiz+1);
+        const buf = ncccutil.malloc(ssiz+1);
         CWGL.cwgl_string_read(ctx, s, buf, ssiz);
         CWGL.cwgl_string_release(ctx, s);
-        buf[ssiz] = 0;
-        return readcstr(buf);
+        //buf[ssiz] = 0;
+        //return readcstr(buf);
+        const r = ncccutil.fetchcstring(buf);
+        ncccutil.free(buf);
+        return r;
     }
 
     let currentTexture2D = null;
