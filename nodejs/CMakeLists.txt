@@ -16,8 +16,6 @@ add_subdirectory(../nccc/nccc/javascript/node-nccc node-nccc)
 
 set(YFRM_DEBUG_COPY ${CMAKE_CURRENT_BINARY_DIR})
 set(YFRM_BUILD_MODULE ON)
-set(YFRM_CWGL_USE_ANGLE ON)
-set(YFRM_CWGL_BACKEND xxxxx) # FIXME:
 add_subdirectory(../yfrm yfrm)
 
 # Use Yuniframe DLL
