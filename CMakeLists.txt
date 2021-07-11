@@ -214,7 +214,6 @@ elseif(APPLE) # FIXME: Change this to APPLE
         "-framework AudioToolbox"
         "-framework AVFoundation"
         "-framework CoreGraphics"
-        "-framework CoreMotion"
         "-framework Foundation"
         "-framework GameController"
         "-framework CoreHaptics"
@@ -236,9 +235,13 @@ elseif(APPLE) # FIXME: Change this to APPLE
             "-framework OpenGLES"
             )
     endif()
-    if("${CMAKE_SYSTEM_NAME}" STREQUAL iOS OR
-            "${CMAKE_SYSTEM_NAME}" STREQUAL tvOS)
-        # FIXME: watchOS ??
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL iOS)
+        list(APPEND platform_deps
+            "-framework CoreMotion"
+            "-framework UIKit"
+            "-framework CoreBluetooth"
+            )
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL tvOS)
         list(APPEND platform_deps
             "-framework UIKit"
             "-framework CoreBluetooth"
@@ -246,6 +249,7 @@ elseif(APPLE) # FIXME: Change this to APPLE
     else()
         # Apple desktop
         list(APPEND platform_deps
+            "-framework CoreMotion"
             "-framework Carbon"
             "-framework ForceFeedback"
             "-framework IOKit"
