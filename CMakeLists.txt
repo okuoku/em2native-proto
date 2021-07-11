@@ -1,16 +1,13 @@
-# Tentative
-if(APPLE)
-    if(NOT YFRM_CWGL_BACKEND)
-        set(YFRM_CWGL_BACKEND PlatformGLES)
-        add_definitions(-DGLES_SILENCE_DEPRECATION)
-    else()
-        set(YFRM_CWGL_USE_METAL ON)
-        # Configure SDL
-        set(VIDEO_OPENGLES OFF CACHE BOOL "" FORCE)
-        set(VIDEO_VULKAN OFF CACHE BOOL "" FORCE)
-        set(HAVE_HIDAPI OFF CACHE BOOL "" FORCE)
-        set(HIDAPI OFF CACHE BOOL "" FORCE)
-    endif()
+if(YFRM_USE_METAL)
+    # Configure SDL
+    set(VIDEO_OPENGLES OFF CACHE BOOL "" FORCE)
+    set(VIDEO_VULKAN OFF CACHE BOOL "" FORCE)
+    set(HAVE_HIDAPI OFF CACHE BOOL "" FORCE)
+    set(HIDAPI OFF CACHE BOOL "" FORCE)
+endif()
+
+if(APPLE AND YFRM_CWGL_USE_GLES)
+    add_definitions(-DGLES_SILENCE_DEPRECATION)
 endif()
 
 cmake_minimum_required(VERSION 3.1)
@@ -159,8 +156,8 @@ elseif(APPLE)
         MACOSX_BUNDLE_LONG_VERSION_STRING 1.0
         MACOSX_BUNDLE_GUI_IDENTIFIER org.cltn.em2app
         #XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
-        # Both iPad and iPhone
-        XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
+        # iPad iPhone and appletv
+        XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2,3"
         )
 else()
     add_executable(em2app WIN32 ${mainsrc})
@@ -206,32 +203,55 @@ if(WIN32 OR WINDOWS_STORE)
         # dx11 (Yuniframe)
         d3d11
         )
-elseif(YFRM_CWGL_USE_METAL) # FIXME: Change this to APPLE
+elseif(APPLE) # FIXME: Change this to APPLE
     # FIXME: Pass these from yuniframe
     set(platform_deps
         "-framework QuartzCore" # for CALayer
-        "-framework Metal"
         "-framework IOSurface"
+        "-framework Metal"
         "-framework CoreVideo"
         "-framework CoreAudio"
         "-framework AudioToolbox"
         "-framework AVFoundation"
-        #"-framework CoreBluetooth"
         "-framework CoreGraphics"
         "-framework CoreMotion"
         "-framework Foundation"
         "-framework GameController"
-        #"-framework OpenGLES"
-        "-framework UIKit"
         "-framework CoreHaptics"
         m
         iconv
-        spirv-cross-msl
-        SPIRV-Tools
-        glslang
-        my-glslang-default-resource-limits
-        SPIRV
         )
+    if(YFRM_CWGL_USE_METAL)
+        list(APPEND platform_deps
+            # FIXME: Move Metal framework here (need SDL config change?)
+            spirv-cross-msl
+            SPIRV-Tools
+            glslang
+            my-glslang-default-resource-limits
+            SPIRV
+            )
+    endif()
+    if(YFRM_CWGL_USE_GLES)
+        list(APPEND platform_deps
+            "-framework OpenGLES"
+            )
+    endif()
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL iOS OR
+            "${CMAKE_SYSTEM_NAME}" STREQUAL tvOS)
+        # FIXME: watchOS ??
+        list(APPEND platform_deps
+            "-framework UIKit"
+            "-framework CoreBluetooth"
+            )
+    else()
+        # Apple desktop
+        list(APPEND platform_deps
+            "-framework Carbon"
+            "-framework ForceFeedback"
+            "-framework IOKit"
+            "-framework AppKit"
+            )
+    endif()
 elseif(UNIX)
     # FIXME: Pickup ANDROID earlier
     if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
