@@ -1,6 +1,3 @@
-# For WindowsStore:
-#   cmake -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0
-
 # Tentative
 if(APPLE)
     if(NOT YFRM_CWGL_BACKEND)
@@ -44,6 +41,8 @@ endif()
 
 if(WIN32)
     set(YFRM_PKG_RSRC_ROOT ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${appname})
+elseif(YFRM_RSRC_LOCATION_RAWFS)
+    set(YFRM_PKG_RSRC_ROOT ${CMAKE_CURRENT_BINARY_DIR}/${appname})
 endif()
 
 set(rsrcs)
@@ -114,7 +113,7 @@ endif()
 # FIXME: Workaround for UWP
 if(WINDOWS_STORE)
     add_definitions(-DSET_SDL_PKG_PATH_PREFIX)
-elseif(WIN32)
+elseif(YFRM_PKG_RSRC_ROOT)
     add_definitions(-DSET_PKGNAME=\"${appname}\")
 endif()
 
@@ -167,9 +166,7 @@ else()
     add_executable(em2app WIN32 ${mainsrc})
 endif()
 
-if("${YFRM_CWGL_BACKEND}" STREQUAL PlatformGLES)
-    set(gles_impl)
-else()
+if(YFRM_CWGL_USE_ANGLE)
     set(gles_impl angle_static)
 endif()
 
@@ -209,7 +206,7 @@ if(WIN32 OR WINDOWS_STORE)
         # dx11 (Yuniframe)
         d3d11
         )
-elseif(YFRM_CWGL_USE_METAL)
+elseif(YFRM_CWGL_USE_METAL) # FIXME: Change this to APPLE
     # FIXME: Pass these from yuniframe
     set(platform_deps
         "-framework QuartzCore" # for CALayer
@@ -235,6 +232,27 @@ elseif(YFRM_CWGL_USE_METAL)
         my-glslang-default-resource-limits
         SPIRV
         )
+elseif(UNIX)
+    # FIXME: Pickup ANDROID earlier
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+        set(platform_deps
+            m
+            dl
+            pthread
+
+            # gcc
+            stdc++fs
+            stdc++
+            )
+    endif()
+    if(NOT YFRM_CWGL_USE_ANGLE)
+        list(APPEND platform_deps
+            EGL
+            GLESv2
+            )
+    endif()
+else()
+    message(FATAL_ERROR "Could not determine platform")
 endif()
 
 if(${CMAKE_GENERATOR} STREQUAL Xcode OR WIN32 OR WINDOWS_STORE)
