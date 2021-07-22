@@ -167,6 +167,21 @@ if(YFRM_CWGL_USE_ANGLE)
     set(gles_impl angle_static)
 endif()
 
+if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
+    if(YFRM_CWGL_USE_VULKAN)
+        set(gles_impl
+            # SHXM
+            SPIRV-Tools
+            glslang
+            my-glslang-default-resource-limits
+            spirv-cross-c
+            SPIRV
+            SPIRV-Tools
+            SPIRV-Tools-opt
+            )
+    endif()
+endif()
+
 set(fs_impl)
 
 if(WIN32 OR WINDOWS_STORE)
