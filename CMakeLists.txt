@@ -114,6 +114,12 @@ elseif(YFRM_PKG_RSRC_ROOT)
     add_definitions(-DSET_PKGNAME=\"${appname}\")
 endif()
 
+if(YFRM_CWGL_USE_PVRVFRAME)
+    link_directories(
+        "C:/Imagination Technologies/PowerVR_Graphics/PowerVR_Tools/PVRVFrame/Library/Windows_x86_64"
+        )
+endif()
+
 # NCCC stub generation
 include(./nccc/nccc/stubsupport/cmake/NcccStubMacros.cmake)
 include(./yfrm/yuniframe/nccc/stub_yfrm.cmake)
@@ -178,6 +184,11 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
             SPIRV
             SPIRV-Tools
             SPIRV-Tools-opt
+            )
+    elseif(YFRM_CWGL_USE_PVRVFRAME)
+        set(gles_impl
+            libEGL
+            libGLESv2
             )
     endif()
 endif()
