@@ -89,17 +89,22 @@ function fetchbyte(addr){
     return v;
 }
 
-function fetchcstring(addr){
+function fetchcstring(addr, limit){
     let acc = [];
     let c = 0;
     let cur = addr;
+    let idx = 0;
     while(1){
         c = fetchbyte(cur);
         if(c == 0){
             break;
         }
+        if(idx == limit){
+            break;
+        }
         acc.push(c);
         cur++;
+        idx++;
     }
     const str = String.fromCharCode.apply(null, acc);
     return str;

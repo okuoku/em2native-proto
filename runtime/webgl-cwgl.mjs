@@ -55,7 +55,7 @@ function GL(w, h, attr){
         CWGL.cwgl_string_release(ctx, s);
         //buf[ssiz] = 0;
         //return readcstr(buf);
-        const r = ncccutil.fetchcstring(buf);
+        const r = ncccutil.fetchcstring(buf, ssiz);
         ncccutil.free(buf);
         return r;
     }
