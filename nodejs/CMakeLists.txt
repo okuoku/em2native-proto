@@ -41,8 +41,16 @@ add_library(nccc_yfrm MODULE
 target_link_libraries(nccc_yfrm yfrm)
 
 # Debug copy
+if(WIN32)
+    set(maybe_symlink)
+else()
+    set(maybe_symlink
+        COMMAND ln -s "$<TARGET_FILE:nccc_yfrm>"
+        "${YFRM_DEBUG_COPY}/nccc_yfrm.dll")
+endif()
 add_custom_command(TARGET nccc_yfrm POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
     "$<TARGET_FILE:nccc_yfrm>"
     "${YFRM_DEBUG_COPY}"
+    ${maybe_symlink}
     )

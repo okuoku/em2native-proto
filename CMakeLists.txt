@@ -118,6 +118,7 @@ if(YFRM_CWGL_USE_PVRVFRAME)
     link_directories(
         "C:/Imagination Technologies/PowerVR_Graphics/PowerVR_Tools/PVRVFrame/Library/Windows_x86_64"
         )
+    set(YFRM_CWGL_USE_PLATFORMGLES ON)
 endif()
 
 # NCCC stub generation
@@ -186,7 +187,7 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
             SPIRV-Tools
             SPIRV-Tools-opt
             )
-    elseif(YFRM_CWGL_USE_PVRVFRAME)
+    elseif(YFRM_CWGL_USE_PLATFORMGLES)
         set(gles_impl
             libEGL
             libGLESv2

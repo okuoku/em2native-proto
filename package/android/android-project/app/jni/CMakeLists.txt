@@ -6,7 +6,9 @@ project(GAME)
 # include(AndroidNdkModules)
 # android_ndk_import_module_cpufeatures()
 
-set(YFRM_CWGL_BACKEND PlatformGLES)
+set(YFRM_CWGL_USE_ANGLE OFF)
+set(YFRM_CWGL_USE_PLATFORMGLES ON)
+set(YFRM_CWGL_USE_GLES ON)
 set(YFRM_PKG_RSRC_ROOT ${CMAKE_CURRENT_LIST_DIR}/../src/main/assets)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../../.. yfrm)
 
