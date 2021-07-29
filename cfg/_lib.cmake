@@ -2,7 +2,7 @@ function(run)
     execute_process(${ARGN}
         RESULT_VARIABLE rr)
     if(rr)
-        message(FATAL_ERROR "fail.")
+        message(FATAL_ERROR "fail(${rr}).")
     endif()
 endfunction()
 

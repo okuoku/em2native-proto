@@ -38,7 +38,5 @@ jobs:
       - name: Prepare
         run: cmake -P cfg/_prepare.cmake
       - name: Build
-        run: cmake -DCONFIG=${{ matrix.configname}} -P cfg/_all.cmake
-
-
+        run: cmake -DCONFIG=${{ matrix.configname }} -P cfg/_all.cmake
 

@@ -2,6 +2,8 @@ include(${CMAKE_CURRENT_LIST_DIR}/_lib.cmake)
 
 # Setup translators
 
+message(STATUS "PATH = $ENV{PATH}")
+
 #
 # wasm2c
 #
