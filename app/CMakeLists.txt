@@ -28,6 +28,16 @@ set(STUBGEN "${CMAKE_CURRENT_LIST_DIR}/../nccc/nccc/wasm/wasm2c/bridge/scripts")
 set(WASMSTUB "${CMAKE_CURRENT_LIST_DIR}/../nccc/nccc/wasm/wasm2c/bridge")
 set(WASMRUNTIME "${CMAKE_CURRENT_LIST_DIR}/../wasm2cruntime")
 
+if(USE_HOST_LLVM)
+    find_program(HOST_CLANG clang.exe)
+    if(NOT HOST_CLANG)
+        message(STATUS "Fallback to VS2019Pro for now.")
+        set(HOST_CLANG
+            # Fallback
+            "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/Llvm/x64/bin/clang.exe")
+    endif()
+endif()
+
 function(translate_wasm proj wasmpath) # => .o (USE_HOST_LLVM) or .c
     set(WASM2C "${WITH_WASM2C}")
 
@@ -51,11 +61,10 @@ function(translate_wasm proj wasmpath) # => .o (USE_HOST_LLVM) or .c
         COMMENT "WASM: Translating .wasm => .c (${proj})")
 
     if(USE_HOST_LLVM)
-        set(clang
-            "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/Llvm/x64/bin/clang.exe")
+        message(STATUS "Host clang: ${HOST_CLANG}")
         # .c => .bc
         add_custom_command(OUTPUT ${bcpath}
-            COMMAND "${clang}" -g3 -c -emit-llvm -O0
+            COMMAND "${HOST_CLANG}" -g3 -c -emit-llvm -O0
             ${opt_target_triple}
             -Xclang -disable-O0-optnone
             -DWASM_RT_MEMCHECK_SIGNAL_HANDLER=1
