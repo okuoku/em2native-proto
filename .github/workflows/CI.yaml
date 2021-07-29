@@ -14,12 +14,6 @@ jobs:
             configname: yfrm-win64-angle-vulkan
           - os: windows-latest
             configname: yfrm-win64-angle-dx11
-          - os: windows-latest
-            configname: em2c-winstore-angle-dx11
-          - os: windows-latest
-            configname: em2c-win64-tracker-vulkan
-          - os: windows-latest
-            configname: em2c-win64-angle-dx11
           - os: macos-latest
             configname: em2c-ios-gles
           - os: macos-latest
