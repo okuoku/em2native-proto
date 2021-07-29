@@ -33,10 +33,10 @@ set(srcpath-em2c ${CMAKE_CURRENT_LIST_DIR}/..)
 set(srcpath-yfrm ${CMAKE_CURRENT_LIST_DIR}/../nodejs)
 if(WIN32)
     set(WASM2C
-        ${CMAKE_CURRENT_LIST_DIR}/app/prepare/wabt-static/wasm2c.exe)
+        ${CMAKE_CURRENT_LIST_DIR}/../app/prepare/wabt-static/wasm2c.exe)
 else()
-    # FIXME:
-    set(WASM2C wasm2c)
+    set(WASM2C 
+        ${CMAKE_CURRENT_LIST_DIR}/../app/prepare/ext/wabt/build/wasm2c)
 endif()
 set(EM2C_OPTS 
     -DEM2C_APPNAME=app1
