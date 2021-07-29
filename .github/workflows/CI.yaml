@@ -1,0 +1,41 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: ${{ matrix.configname }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            configname: yfrm-win64-tracker-vulkan
+          - os: windows-latest
+            configname: yfrm-win64-angle-vulkan
+          - os: windows-latest
+            configname: yfrm-win64-angle-dx11
+          - os: windows-latest
+            configname: em2c-winstore-angle-dx11
+          - os: windows-latest
+            configname: em2c-win64-tracker-vulkan
+          - os: windows-latest
+            configname: em2c-win64-angle-dx11
+          - os: macos-latest
+            configname: em2c-ios-gles
+          - os: macos-latest
+            configname: em2c-mac-angle-metal
+          - os: macos-latest
+            configname: em2c-tvos-gles
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Prepare
+        run: cmake -P cfg/_prepare.cmake
+      - name: Build
+        run: cmake -DCONFIG=${{ matrix.configname}} -P cfg/_all.cmake
+
+
+

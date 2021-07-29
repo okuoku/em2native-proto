@@ -9,7 +9,13 @@ else()
     set(host UNIX)
 endif()
 
-foreach(cfg ${configs})
+if(CONFIG)
+    set(runconfigs ${CONFIG})
+else()
+    set(runconfigs ${configs})
+endif()
+
+foreach(cfg ${runconfigs})
     if(hosttype-${cfg} STREQUAL host)
         message(STATUS "Config: ${cfg}")
         configure(${cfg}
@@ -18,7 +24,7 @@ foreach(cfg ${configs})
     endif()
 endforeach()
 
-foreach(cfg ${configs})
+foreach(cfg ${runconfigs})
     if(host STREQUAL "WIN32")
         set(opt -j8 -- /p:CL_MPcount=8)
     elseif(${host} STREQUAL "APPLE")
