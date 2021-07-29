@@ -14,6 +14,12 @@ jobs:
             configname: yfrm-win64-angle-vulkan
           - os: windows-latest
             configname: yfrm-win64-angle-dx11
+          - os: windows-latest
+            configname: em2c-winstore-angle-dx11
+          - os: windows-latest
+            configname: em2c-win64-tracker-vulkan
+          - os: windows-latest
+            configname: em2c-win64-angle-dx11
           - os: macos-latest
             configname: em2c-ios-gles
           - os: macos-latest
@@ -29,6 +35,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: matrix.os == 'windows-latest'
       - name: Prepare
         run: cmake -P cfg/_prepare.cmake
       - name: Build
