@@ -24,8 +24,18 @@ endif()
 # npm (for rollup.js)
 #
 
+if(WIN32)
+    # To support PowerShell
+    set(NPM npm.cmd)
+    set(ROLLUP rollup.cmd)
+    set(PATHSEP \\)
+else()
+    set(NPM npm)
+    set(ROLLUP rollup)
+    set(PATHSEP /)
+endif()
 set(jsdir ${CMAKE_CURRENT_LIST_DIR}/../jsprebuild)
-run(COMMAND npm ci
+run(COMMAND ${NPM} ci
     WORKING_DIRECTORY ${jsdir})
-run(COMMAND ./node_modules/.bin/rollup -c
+run(COMMAND .${PATHSEP}node_modules${PATHSEP}.bin${PATHSEP}${ROLLUP} -c
     WORKING_DIRECTORY ${jsdir})
