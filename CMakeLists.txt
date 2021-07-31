@@ -111,7 +111,9 @@ endif()
 if(WINDOWS_STORE)
     add_definitions(-DSET_SDL_PKG_PATH_PREFIX)
 elseif(YFRM_PKG_RSRC_ROOT)
-    add_definitions(-DSET_PKGNAME=\"${appname}\")
+    if(NOT ANDROID)
+        add_definitions(-DSET_PKGNAME=\"${appname}\")
+    endif()
 endif()
 
 if(YFRM_CWGL_USE_PVRVFRAME)
@@ -284,8 +286,16 @@ elseif(APPLE) # FIXME: Change this to APPLE
             "-framework AppKit"
             )
     endif()
+elseif(ANDROID)
+    set(platform_deps
+        # FIXME: These are PLATFORMGLES
+        EGL
+        GLESv2
+        # SDL
+        dl log android hidapi
+        GLESv1_CM # FIXME: Can we disable it?
+        )
 elseif(UNIX)
-    # FIXME: Pickup ANDROID earlier
     if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
         set(platform_deps
             m
