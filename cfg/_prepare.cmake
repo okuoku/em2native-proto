@@ -14,6 +14,7 @@ if(NOT WIN32)
     set(builddir ${CMAKE_CURRENT_LIST_DIR}/../app/prepare/ext/wabt/build)
     file(MAKE_DIRECTORY ${builddir})
     run(COMMAND ${CMAKE_COMMAND}
+        -G Ninja
         -DCMAKE_BUILD_TYPE=RelWithDebInfo
         ..
         WORKING_DIRECTORY ${builddir})
