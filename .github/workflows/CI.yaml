@@ -37,7 +37,7 @@ jobs:
           node-version: '14'
       - uses: ashutoshvarma/setup-ninja@66ad2db9ed7d211c065daeeb849e9c8c895773c9
         with:
-          dest: "/ninja_bin"
+          dest: ${{ github.workspace }}/ninja_bin
       - uses: ilammy/msvc-dev-cmd@v1
         if: matrix.os == 'windows-latest'
       - name: Prepare
