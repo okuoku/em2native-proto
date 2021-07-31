@@ -95,3 +95,8 @@ config(yfrm UNIX posix-gles
     -DYFRM_CWGL_USE_PLATFORMGLES=ON
     -DYFRM_CWGL_USE_GLES=ON)
 
+config(yfrm UNIX posix-angle-vulkan
+    -G Ninja
+    -DYFRM_CWGL_USE_ANGLE=ON
+    -DYFRM_CWGL_USE_VULKAN=ON)
+
