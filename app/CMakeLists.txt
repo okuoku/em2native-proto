@@ -76,7 +76,7 @@ function(translate_wasm proj wasmpath) # => .o (USE_HOST_LLVM) or .c
 
         # .bc => .o
         add_custom_command(OUTPUT ${outpath}
-            COMMAND "${clang}" -g3 -O1 -c
+            COMMAND "${HOST_CLANG}" -g3 -O1 -c
             ${opt_target_triple}
             -o ${outpath} ${bcpath}
             DEPENDS ${bcpath}
