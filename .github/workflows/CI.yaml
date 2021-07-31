@@ -29,7 +29,7 @@ jobs:
           - os: ubuntu-latest
             configname: yfrm-posix-gles
           - os: ubuntu-latest
-            configname: yfrm-angle-vulkan
+            configname: yfrm-posix-angle-vulkan
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -44,9 +44,8 @@ jobs:
           dest: ${{ github.workspace }}/ninja_bin
       - uses: ilammy/msvc-dev-cmd@v1
         if: matrix.os == 'windows-latest'
-      - name: Setup Linux additional packages
-        if: matrix.os == 'ubuntu-latest'
-        run: cmake -DCONFIG=${{ matrix.configname }}  -P cfg/_ghactionprepare.cmake
+      - name: Setup additional packages
+        run: cmake -DOS=${{ matrix.os }} -DCONFIG=${{ matrix.configname }}  -P cfg/_ghactionprepare.cmake
       - name: Prepare
         run: cmake -P cfg/_prepare.cmake
       - name: Build

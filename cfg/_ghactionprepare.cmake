@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.1)
 
 include(${CMAKE_CURRENT_LIST_DIR}/_lib.cmake)
 
-if(CONFIG STREQUAL "android")
+if("${CONFIG}" STREQUAL "android")
     message(STATUS "Skip package installation for Android target")
     return()
 endif()
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(OS MATCHES "ubuntu-*")
     message(STATUS "Installing packages")
     # From SDL:e5594e66778707c3bd9e1bce229140564e0c9844 sans some Wayland and Ninja
     run(COMMAND sudo apt install
@@ -44,5 +44,5 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         libpango1.0-dev
         )
 else()
-    message(STATUS "No additional package for ${CMAKE_SYSTEM_NAME}")
+    message(STATUS "No additional package for ${OS}")
 endif()
