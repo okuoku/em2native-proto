@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 include(${CMAKE_CURRENT_LIST_DIR}/_lib.cmake)
 
-if("${CONFIG}" STREQUAL "android")
+if("${CONFIG}" MATCHES "android-*")
     message(STATUS "Skip package installation for Android target")
     return()
 endif()

@@ -6,11 +6,20 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/sdl-android)
 
 set(WASM2C ${CMAKE_CURRENT_LIST_DIR}/../app/prepare/ext/wabt/build/wasm2c)
 
+message(STATUS "Generate project")
+
 run(COMMAND
     ${CMAKE_COMMAND} 
     -DEM2C_APPNAME=app1
     -DWITH_WASM2C=${WASM2C}
     -DPACKAGE_PLATFORM=sdl-android
     -P ${CMAKE_CURRENT_LIST_DIR}/../package/_genproject.cmake
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/sdl-android
+    )
+
+message(STATUS "Build with gradlew")
+
+run(COMMAND
+    ./gradlew assembleDebug
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/sdl-android
     )

@@ -12,6 +12,12 @@ else()
 endif()
 
 if(CONFIG)
+    # Special case for android
+    if(CONFIG MATCHES "android-*")
+        run(COMMAND
+            ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/sdl-android.cmake)
+        return()
+    endif()
     set(runconfigs ${CONFIG})
 else()
     set(runconfigs ${configs})
