@@ -83,16 +83,15 @@ config(yfrm WIN32 win64-tracker-vulkan
 
 # Posix
 
-config(em2c UNIX posix-gles
-    -G Ninja
-    -DYFRM_CWGL_USE_ANGLE=OFF
-    -DYFRM_CWGL_USE_GLES=ON
-    -DYFRM_RSRC_LOCATION_RAWFS=ON)
+#config(em2c UNIX posix-gles
+#    -G Ninja
+#    -DYFRM_CWGL_USE_ANGLE=OFF
+#    -DYFRM_CWGL_USE_GLES=ON
+#    -DYFRM_RSRC_LOCATION_RAWFS=ON)
 
 config(yfrm UNIX posix-gles
     -G Ninja
     -DYFRM_CWGL_USE_ANGLE=OFF
     -DYFRM_CWGL_USE_PLATFORMGLES=ON
     -DYFRM_CWGL_USE_GLES=ON)
-
 
