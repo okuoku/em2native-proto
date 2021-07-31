@@ -83,6 +83,7 @@ config(yfrm WIN32 win64-tracker-vulkan
 
 # Posix
 
+# FIXME: We don't have execpath for POSIX yet
 #config(em2c UNIX posix-gles
 #    -G Ninja
 #    -DYFRM_CWGL_USE_ANGLE=OFF
