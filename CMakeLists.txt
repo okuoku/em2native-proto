@@ -147,6 +147,16 @@ set(mainsrc
     ${rsrcs}
     )
 
+set(need_cxx OFF)
+if(YFRM_CWGL_USE_VULKAN)
+    set(need_cxx ON)
+endif()
+
+if(need_cxx)
+    list(APPEND mainsrc
+        dummy.cpp)
+endif()
+
 if(WINDOWS_STORE)
     add_executable(em2app WIN32 ${mainsrc})
 elseif(WIN32)
@@ -178,7 +188,27 @@ if(YFRM_CWGL_USE_ANGLE)
 endif()
 
 if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
-    if(YFRM_CWGL_USE_VULKAN)
+    if(YFRM_CWGL_USE_MOLTENVK)
+        # Use MoltenVk external vulkan implementation
+        if(NOT WITH_MOLTENVK)
+            message(FATAL_ERROR "Need WITH_MOLTENVK variable")
+        endif()
+
+        set(gles_impl # FIXME: Move this below, inside if(APPLE)
+            # SHXM
+            SPIRV-Tools
+            glslang
+            my-glslang-default-resource-limits
+            spirv-cross-c
+            SPIRV
+            SPIRV-Tools
+            SPIRV-Tools-opt
+            # MoltenVK also have these..
+            # FIXME: Detect platform
+            "-L ${WITH_MOLTENVK}/MoltenVK.xcframework/macos-arm64_x86_64"
+            MoltenVK)
+
+    elseif(YFRM_CWGL_USE_VULKAN)
         set(gles_impl
             # SHXM
             SPIRV-Tools
@@ -335,3 +365,8 @@ target_link_libraries(em2app
     ${platform_deps}
     )
 add_dependencies(em2app SDL2-static)
+if(need_cxx)
+    set_target_properties(em2app
+        PROPERTIES
+        LINKER_LANGUAGE CXX)
+endif()

@@ -17,6 +17,13 @@ config(em2c APPLE tvos-gles
     -DCMAKE_SYSTEM_NAME=tvOS
     -DYFRM_CWGL_USE_GLES=ON)
 
+config(em2c APPLE mac-tracker-vulkan # Not on CI (License)
+    -G Xcode
+    -DYFRM_CWGL_USE_ANGLE=OFF
+    -DYFRM_CWGL_USE_VULKAN=ON
+    -DYFRM_CWGL_EXPERIMENTAL_TRACKER=ON
+    -DBUILD_SHARED_LIBS=OFF)
+
 # Microsoft platforms
 
 config(em2c WIN32 win64-angle-dx11
