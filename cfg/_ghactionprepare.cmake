@@ -9,6 +9,7 @@ endif()
 
 if(OS MATCHES "ubuntu-*")
     message(STATUS "Installing packages")
+    run(COMMAND sudo apt update)
     # From SDL:e5594e66778707c3bd9e1bce229140564e0c9844 sans some Wayland and Ninja
     run(COMMAND sudo apt install
         wayland-protocols 
