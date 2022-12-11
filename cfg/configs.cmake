@@ -27,13 +27,13 @@ config(em2c APPLE mac-tracker-vulkan # Not on CI (License)
 # Microsoft platforms
 
 config(em2c WIN32 win64-angle-dx11
-    -G "Visual Studio 16 2019"
+    -G "Visual Studio 17 2022"
     -A x64
     -DYFRM_CWGL_USE_ANGLE=ON
     -DYFRM_CWGL_USE_DX11=ON)
 
 config(em2c WIN32 win64-tracker-pvr
-    -G "Visual Studio 16 2019"
+    -G "Visual Studio 17 2022"
     -A x64
     -DYFRM_CWGL_USE_ANGLE=OFF
     -DYFRM_CWGL_USE_GLES=ON
@@ -41,7 +41,7 @@ config(em2c WIN32 win64-tracker-pvr
     -DYFRM_CWGL_EXPERIMENTAL_TRACKER=ON
     )
 config(em2c WIN32 win64-tracker-vulkan
-    -G "Visual Studio 16 2019"
+    -G "Visual Studio 17 2022"
     -A x64
     -DYFRM_CWGL_USE_ANGLE=OFF
     -DYFRM_CWGL_USE_GLES=OFF
@@ -49,7 +49,7 @@ config(em2c WIN32 win64-tracker-vulkan
     -DYFRM_CWGL_EXPERIMENTAL_TRACKER=ON)
 
 config(em2c WIN32 winstore-angle-dx11
-    -G "Visual Studio 16 2019"
+    -G "Visual Studio 17 2022"
     -A x64
     -DCMAKE_SYSTEM_NAME=WindowsStore
     -DCMAKE_SYSTEM_VERSION=10.0
@@ -57,21 +57,21 @@ config(em2c WIN32 winstore-angle-dx11
     -DYFRM_CWGL_USE_DX11=ON)
 
 config(yfrm WIN32 win64-angle-dx11
-    -G "Visual Studio 16 2019"
+    -G "Visual Studio 17 2022"
     -A x64
     -DYFRM_CWGL_USE_ANGLE=ON
     -DYFRM_CWGL_USE_DX11=ON
     )
 
 config(yfrm WIN32 win64-angle-vulkan
-    -G "Visual Studio 16 2019"
+    -G "Visual Studio 17 2022"
     -A x64
     -DYFRM_CWGL_USE_ANGLE=ON
     -DYFRM_CWGL_USE_VULKAN=ON
     )
 
 config(yfrm WIN32 win64-tracker-pvr
-    -G "Visual Studio 16 2019"
+    -G "Visual Studio 17 2022"
     -A x64
     -DYFRM_CWGL_USE_ANGLE=OFF
     -DYFRM_CWGL_USE_PVRVFRAME=ON
@@ -80,7 +80,7 @@ config(yfrm WIN32 win64-tracker-pvr
     )
 
 config(yfrm WIN32 win64-tracker-vulkan
-    -G "Visual Studio 16 2019"
+    -G "Visual Studio 17 2022"
     -A x64
     -DYFRM_CWGL_USE_ANGLE=OFF
     -DYFRM_CWGL_USE_GLES=OFF
