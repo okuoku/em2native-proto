@@ -31,7 +31,7 @@ set(WASMRUNTIME "${CMAKE_CURRENT_LIST_DIR}/../wasm2cruntime")
 if(USE_HOST_LLVM)
     find_program(HOST_CLANG clang.exe)
     if(NOT HOST_CLANG)
-        message(STATUS "Fallback to VS2019Pro for now.")
+        message(STATUS "Fallback to VS clang.exe for now.")
         # Need Microsoft.VisualStudio.VC.Llvm.Clang
         set(HOST_CLANG
             # Try to fallback VC clang.exe
