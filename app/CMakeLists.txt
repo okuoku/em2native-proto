@@ -1,4 +1,4 @@
-# NB: It's not compatible with MSVC for now
+# NB: It's not compatible with MSVC frontend for now (Use USE_HOST_LLVM)
 
 if(NOT APP_WASM)
     message(FATAL_ERROR "APP_WASM is not set")
@@ -32,9 +32,14 @@ if(USE_HOST_LLVM)
     find_program(HOST_CLANG clang.exe)
     if(NOT HOST_CLANG)
         message(STATUS "Fallback to VS2019Pro for now.")
+        # Need Microsoft.VisualStudio.VC.Llvm.Clang
         set(HOST_CLANG
-            # Fallback
-            "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/Llvm/x64/bin/clang.exe")
+            # Try to fallback VC clang.exe
+            # FIXME: Refer $VCINSTALLDIR
+            "C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/Llvm/x64/bin/clang.exe")
+        if(NOT EXISTS "${HOST_CLANG}")
+            message(FATAL_ERROR "Host clang not found. (Need `Microsoft.VisualStudio.VC.Llvm.Clang`)")
+        endif()
     endif()
 endif()
 
