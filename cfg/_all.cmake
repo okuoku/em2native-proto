@@ -33,24 +33,36 @@ foreach(cfg ${runconfigs})
 endforeach()
 
 foreach(cfg ${runconfigs})
+    set(multiconfig)
     if(host STREQUAL "WIN32")
         set(opt -j8 -- /p:CL_MPcount=8)
+        set(multiconfig Debug RelWithDebInfo)
     elseif(host STREQUAL "APPLE")
         set(opt -- CODE_SIGNING_ALLOWED=NO)
+        set(multiconfig Debug RelWithDebInfo)
     else()
         set(opt)
+        set(multiconfig DEFAULT)
     endif()
     if(hosttype-${cfg} STREQUAL host)
-        message(STATUS "Build: ${cfg}")
-        execute_process(COMMAND
-            ${CMAKE_COMMAND}
-            --build .
-            ${opt}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${cfg}
-            RESULT_VARIABLE rr)
-        if(rr)
-            message(FATAL_ERROR "build error")
-        endif()
+        foreach(c ${multiconfig})
+            if(c STREQUAL "DEFAULT")
+                set(cfgopt)
+            else()
+                set(cfgopt --config ${c})
+            endif()
+            message(STATUS "Build: ${cfg}/${c}")
+            execute_process(COMMAND
+                ${CMAKE_COMMAND}
+                --build .
+                ${cfgopt}
+                ${opt}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${cfg}
+                RESULT_VARIABLE rr)
+            if(rr)
+                message(FATAL_ERROR "build error(cfg: ${cfg}/${c})")
+            endif()
+        endforeach()
     endif()
 endforeach()
 
