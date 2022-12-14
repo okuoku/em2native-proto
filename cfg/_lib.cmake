@@ -20,6 +20,10 @@ function(configure buildname srcdir)
     execute_process(
         COMMAND
         ${CMAKE_COMMAND}
+        # SDL2 workaround
+        # https://github.com/libsdl-org/SDL/blob/c7097418711b57e786eeb464bbe366c056b19801/CMakeLists.txt#L3041
+        # assumes `CMAKE_INSTALL_PREFIX` is defined
+        -DCMAKE_INSTALL_PREFIX=/NEVERLAND
         ${ARGN}
         ${srcdir}
         WORKING_DIRECTORY ${builddir}
