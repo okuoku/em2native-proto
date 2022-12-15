@@ -29,8 +29,6 @@ jobs:
           - os: ubuntu-latest
             configname: yfrm-posix-gles
           - os: ubuntu-latest
-            configname: yfrm-posix-angle-vulkan
-          - os: ubuntu-latest
             configname: android-sdl
     runs-on: ${{ matrix.os }}
 
