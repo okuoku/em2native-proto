@@ -42,14 +42,15 @@ if(PACKAGE_PLATFORM STREQUAL "sdl-android")
         app/src/main/res/values/styles.xml
         app/src/main/res/values/strings.xml
         app/src/main/AndroidManifest.xml
-        app/src/main/java/org/libsdl/app/SDLAudioManager.java
-        app/src/main/java/org/libsdl/app/SDLControllerManager.java
         app/src/main/java/org/libsdl/app/HIDDevice.java
         app/src/main/java/org/libsdl/app/HIDDeviceBLESteamController.java
+        app/src/main/java/org/libsdl/app/HIDDeviceManager.java
         app/src/main/java/org/libsdl/app/HIDDeviceUSB.java
         app/src/main/java/org/libsdl/app/SDL.java
         app/src/main/java/org/libsdl/app/SDLActivity.java
-        app/src/main/java/org/libsdl/app/HIDDeviceManager.java
+        app/src/main/java/org/libsdl/app/SDLAudioManager.java
+        app/src/main/java/org/libsdl/app/SDLControllerManager.java
+        app/src/main/java/org/libsdl/app/SDLSurface.java
         gradle/wrapper/gradle-wrapper.jar
         gradle/wrapper/gradle-wrapper.properties
         gradlew
