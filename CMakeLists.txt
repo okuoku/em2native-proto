@@ -148,7 +148,7 @@ set(mainsrc
     )
 
 set(need_cxx OFF)
-if(YFRM_CWGL_USE_VULKAN)
+if(YFRM_CWGL_USE_VULKAN OR ANDROID)
     set(need_cxx ON)
 endif()
 
@@ -322,7 +322,8 @@ elseif(ANDROID)
         EGL
         GLESv2
         # SDL
-        dl log android hidapi
+        dl log android 
+        OpenSLES
         GLESv1_CM # FIXME: Can we disable it?
         )
 elseif(UNIX)
